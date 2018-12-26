@@ -1,0 +1,3 @@
+sensorId: 1 value: 35
+sensorId: 1 value: 38
+sensorId: 56 value: 55

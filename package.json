@@ -1,0 +1,15 @@
+{
+  "name": "hyperloop_rroy6",
+  "version": "1.0.0",
+  "description": "express web server to communicate between pod and laptop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rupam roy",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4"
+  }
+}
