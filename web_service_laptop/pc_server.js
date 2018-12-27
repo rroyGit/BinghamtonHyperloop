@@ -52,10 +52,12 @@ function doReadTemp (app) {
   return errorWrap(async function(req, res) {
     try {
       const sensorId = req.params.sensorId; 
-     
+      
+      res.send(`GOOD: sensorID ${sensorId}`);
      
     } catch(err) {
-     
+      res.send("BAD");
+      console.log(err);
     }
   });
 }
