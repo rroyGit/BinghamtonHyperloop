@@ -1,0 +1,35 @@
+html, body {
+    background-color: darkslategrey;
+    background-repeat: repeat-x;
+    background-position: right top;
+    background-attachment: fixed;
+
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.sensor {
+    display: inline;
+    font-weight: bold;
+    color: lightsalmon;
+}
+
+.temp div {
+    font-size: 35px;
+    font-family: 'Libre Baskerville', serif;
+}
+
+.logoheader h1 {
+  
+    color: whitesmoke;
+    margin-top: 0%;
+    padding-bottom: 0.5%;
+    padding-top: 0.5%;
+    font-family: 'Libre Baskerville', serif;
+}
+
+.logoheader {
+  background-image: linear-gradient(white, rgba(255,5,0,0));
+  text-align: center;
+}

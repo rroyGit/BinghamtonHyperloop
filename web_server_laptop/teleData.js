@@ -25,7 +25,8 @@ function serve(port, base, model) {
   app.locals.base = base;
   app.locals.model = model;
   process.chdir(__dirname);
-  app.use(base, express.static(STATIC_DIR));
+ 
+  app.use(base, express.static(__dirname));
   app.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -46,9 +47,9 @@ function setupRoutes(app) {
   // @routes
   const base = app.locals.base;
   app.get(`/`, toHomepage(app));
-
+  
   // get file content
-  app.get(`${base}/temp/:sensorId`, getTemp(app));
+  app.get(`/temp/:sensorId`, getTemp(app));
 
   app.use(doErrors()); //must be last - setup for server errors
 }
@@ -70,9 +71,8 @@ function getTemp(app) {
   return errorWrap(async function(req, res) {
     try {
 
-      const sensorId = req.params.name;
+      const sensorId = req.params.sensorId;
       const contentData = await app.locals.model.getTemp(sensorId);
-      console.log(contentData);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
@@ -80,6 +80,7 @@ function getTemp(app) {
     }
     catch (err) {
       console.error(err);
+      console.log("ERROR in teleData");
     }
   });
 }

@@ -53,7 +53,9 @@ function doReadTemp (app) {
     try {
       const sensorId = req.params.sensorId; 
       
-      res.send(`GOOD: sensorID ${sensorId}`);
+      const fileName = `temp${sensorId}.txt`;
+      const value = await app.locals.processor.readFile(fileName);
+      res.send(value);
      
     } catch(err) {
       res.send("BAD");
@@ -76,7 +78,7 @@ function doWriteTemp (app) {
 
       const [sensorId, value] = [req.query.sensorId, req.query.value];
     
-      await app.locals.processor.writeFile(`sensorId: ${sensorId} value: ${value}`);
+      await app.locals.processor.writeFile(sensorId, value);
       res.send("GOOD");
      
     } catch(err) {
