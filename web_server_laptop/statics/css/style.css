@@ -16,6 +16,7 @@ html, body {
 }
 
 .temp div {
+    color: aliceblue;
     font-size: 35px;
     font-family: 'Libre Baskerville', serif;
 }

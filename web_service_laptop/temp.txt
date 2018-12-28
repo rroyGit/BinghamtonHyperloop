@@ -10,3 +10,14 @@ sensorId: 2 value: 1999
 sensorId: 2 value: 1998
 sensorId: 2 value: 13
 sensorId: 1 value: 13
+sensorId: 1 value: 999
+sensorId: 1 value: 99
+sensorId: 2 value: 965
+sensorId: 2 value: 968
+sensorId: 2 value: 90125
+sensorId: 2 value: -776
+sensorId: 2 value: 8
+sensorId: 2 value: 200
+sensorId: 2 value: -84
+sensorId: 2 value: 895
+sensorId: 1 value: 8563355
