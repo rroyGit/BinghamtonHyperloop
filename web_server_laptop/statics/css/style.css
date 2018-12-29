@@ -9,28 +9,78 @@ html, body {
     padding: 0;
 }
 
-.sensor {
-    display: inline;
-    font-weight: bold;
-    color: lightsalmon;
-}
-
-.temp div {
-    color: aliceblue;
-    font-size: 35px;
-    font-family: 'Libre Baskerville', serif;
+.logoheader image {
+    float: left;
 }
 
 .logoheader h1 {
-  
-    color: whitesmoke;
-    margin-top: 0%;
+    color: #ffffff;
+    margin-top: -70px;
     padding-bottom: 0.5%;
     padding-top: 0.5%;
     font-family: 'Libre Baskerville', serif;
+    text-align: center;
+    font-size: 37px;
+    font-weight: bold;
+
 }
 
 .logoheader {
   background-image: linear-gradient(white, rgba(255,5,0,0));
-  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+.headerSensor {
+    text-align: center;
+
+    margin-left: 1%;
+    margin-right: 1%;
+
+    padding: 5px;
+
+    font-size: 32px;
+    font-family: 'Libre Baskerville', serif;
+    
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    border-radius: 25px;
+    border: 2px solid white;
+    width: auto;
+    height: auto;
+}
+
+.sensor {
+    text-align: center;
+    font-weight: bold;
+    font-size:  60px;
+    color:#479b0f;
+    font-family: 'IBM Plex Mono', monospace;
+
+    line-height: 200px;
+}
+
+.temp {
+    display: grid;
+    margin-top: -50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1em;
+
+    grid-auto-rows: minmax(200px, auto);
+    padding: 2.5%;
+}
+
+.title {
+    background:  linear-gradient(45deg, rgba(212,255,196,1) 0%, rgba(0,128,128,1) 100%);
+}
+.temp > div {
+    color: black;
+    background: lightgray;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Libre Baskerville', serif;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

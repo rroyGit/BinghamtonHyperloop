@@ -18,11 +18,12 @@ function init () {
     }
 
     request.onload = function () {
+        sensor1Container.style.color = "#ff0026";
         sensor1Container.innerHTML = getNumber(request.responseText);
     }
 
     request2.onload = function () {
-
+        sensor2Container.style.color = "#ff0026";
         sensor2Container.innerHTML = getNumber(request2.responseText);
     }
 }
