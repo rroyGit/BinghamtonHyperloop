@@ -85,6 +85,24 @@ button:focus {outline:0;}
     background-color: #69d11f;
 }
 
+#startButton:active {
+    vertical-align: top;
+    padding: 8px 13px 6px;
+}
+
+#stopButton:active {
+    vertical-align: top;
+    padding: 8px 13px 6px;
+}
+
+#stopButton:focus {
+    border-color: lightgray;
+}
+
+#startButton:focus {
+    border-color: lightgray;
+}
+
 @media all and (max-width:30em){
     .buttons {
         display: block;
@@ -93,7 +111,6 @@ button:focus {outline:0;}
 }
 .headerSensor {
     text-align: center;
-
     margin-left: 1%;
     margin-right: 1%;
 
@@ -110,33 +127,41 @@ button:focus {outline:0;}
     border: 2px solid white;
     width: auto;
     height: auto;
+    
+    margin-top: 0.5%;
+}
+
+#distHeader, #speedHeader {
+    margin-top: -1%;
 }
 
 .sensor {
     text-align: center;
     font-weight: bold;
-    font-size:  60px;
+    font-size: 3vw;
     color:#479b0f;
     font-family: 'IBM Plex Mono', monospace;
-
     line-height: 200px;
 }
 
-.temp {
+.sensors {
     display: grid;
     margin-top: -2%;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1em;
+    grid-gap: 2em;
 
     grid-auto-rows: minmax(200px, auto);
     padding: 2.5%;
+    
 }
 
 .title {
     background:  linear-gradient(45deg, rgba(212,255,196,1) 0%, rgba(0,128,128,1) 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     font-family: 'IBM Plex Mono', monospace;
+    font-size: 80%;
 }
-.temp > div {
+.sensors > div {
     color: black;
     background: lightgray;
     font-weight: bold;
