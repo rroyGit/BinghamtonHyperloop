@@ -25,10 +25,10 @@ html, body {
 }
 
 .logoheader {
-  background-image: linear-gradient(white, rgba(255,5,0,0));
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display: inline-block;
-  width: 100%;
+    background-image: linear-gradient(white, rgba(255,5,0,0));
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: inline-block;
+    width: 100%;
 }
 
 .buttonsWrapper {
@@ -36,7 +36,6 @@ html, body {
 }
 
 .buttons {
-    display: inline-block;
     padding: 0.3em 1.2em;
     margin: .5em 0.1em 0.1em 0;
     border: 0.16em solid rgba(255,255,255,0);
@@ -53,15 +52,14 @@ html, body {
     
     font-size: 30px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
 }
 
 button:focus {outline:0;}
 
 .divider{
-    width:5px;
-    height:auto;
-    display:inline-block;
+    width: 5px;
+    height: auto;
+    display: inline-block;
 }
 
 #startButton {
@@ -153,6 +151,46 @@ button:focus {outline:0;}
     grid-auto-rows: minmax(200px, auto);
     padding: 2.5%;
     
+}
+
+.refreshTimeC {
+    margin: 0;
+    position: absolute;
+    width: 27%;
+    top: 17%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#timeInput {
+    height: 30px;
+    width: 45%;
+    border: 1px solid #eee;
+    border-left: 15px solid;
+    border-right: 15px solid;
+    border-radius: 5px;
+    transition: border-color .5s ease-out;
+    border-left-color: lightsalmon;
+    border-right-color: lightsalmon;
+
+    margin-left: 15px;
+    margin-top: 1%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: sans-serif;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#refreshTitle {
+    color: #FFFFFF;
+    font-size: 22px;
+    padding: 10px;
+    float: left;
+    margin-left: 8%;
+    font-family: sans-serif;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-image: linear-gradient(gray, rgba(255,5,0,0));
 }
 
 .title {
