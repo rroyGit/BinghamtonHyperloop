@@ -15,8 +15,6 @@ module.exports = VisualWS;
 VisualWS.prototype.getTemp = async function (sensorId) {
   try {
     const url = this.webServiceUrl + "/" + `${sensorId}`;
-  
-    console.log(url);
     const response = await axios.get(url);
 
     return response.data;

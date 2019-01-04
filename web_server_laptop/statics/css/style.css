@@ -44,19 +44,19 @@ html, body {
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
- 
+
     color:#FFFFFF;
     text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
-    text-align: center;
-    transition: all 0.2s;
     
+    transition: all 0.2s;
+
     font-size: 30px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 button:focus {outline:0;}
 
-.divider{
+.divider {
     width: 5px;
     height: auto;
     display: inline-block;
@@ -64,6 +64,7 @@ button:focus {outline:0;}
 
 #startButton {
     background-color: green;
+    margin-left: -27.75%;
 }
 
 #stopButton {
@@ -101,7 +102,7 @@ button:focus {outline:0;}
     border-color: lightgray;
 }
 
-@media all and (max-width:30em){
+@media all and (max-width: 30em){
     .buttons {
         display: block;
         margin: 0.2em auto;
@@ -126,7 +127,7 @@ button:focus {outline:0;}
     width: auto;
     height: auto;
     
-    margin-top: 0.5%;
+    margin-top: 0.7%;
 }
 
 #distHeader, #speedHeader {
@@ -135,11 +136,12 @@ button:focus {outline:0;}
 
 .sensor {
     text-align: center;
+    
     font-weight: bold;
     font-size: 3vw;
     color:#479b0f;
     font-family: 'IBM Plex Mono', monospace;
-    line-height: 200px;
+    line-height: 170%;
 }
 
 .sensors {
@@ -148,50 +150,49 @@ button:focus {outline:0;}
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 2em;
 
-    grid-auto-rows: minmax(200px, auto);
+    grid-auto-rows: minmax(110%, auto);
     padding: 2.5%;
     
 }
 
 .refreshTimeC {
-    margin: 0;
-    position: absolute;
-    width: 27%;
-    top: 17%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    transform: translate(0px, 25px);
 }
 
 #timeInput {
-    height: 30px;
-    width: 45%;
-    border: 1px solid #eee;
-    border-left: 15px solid;
-    border-right: 15px solid;
-    border-radius: 5px;
-    transition: border-color .5s ease-out;
-    border-left-color: lightsalmon;
-    border-right-color: lightsalmon;
-
+    height: 26px;
+    width: 25%;
     margin-left: 15px;
-    margin-top: 1%;
+    
     text-align: center;
-    font-size: 22px;
+    font-size: 120%;
     font-weight: bold;
     font-family: sans-serif;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border: none;
+	border-radius: 2px;
+	
+    background: white;
+	outline: 0;
+	box-sizing: border-box; 
+    color: black;
+}
+
+#timeInput:hover {
+    background: lightgrey;
 }
 
 #refreshTitle {
     color: #FFFFFF;
-    font-size: 22px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    font-size: 100%;
     padding: 10px;
     float: left;
-    margin-left: 8%;
+    width: 25%;
+    margin-left: 2.5%;
     font-family: sans-serif;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-image: linear-gradient(gray, rgba(255,5,0,0));
 }
+
+
 
 .title {
     background:  linear-gradient(45deg, rgba(212,255,196,1) 0%, rgba(0,128,128,1) 100%);
@@ -206,5 +207,6 @@ button:focus {outline:0;}
     font-size: 30px;
     font-family: 'Libre Baskerville', serif;
     text-align: center;
+  
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

@@ -3,6 +3,7 @@ var sensor2Container = document.getElementById("tempSensor2");
 
 var startButton = document.getElementById("startButton");
 var stopButton = document.getElementById("stopButton");
+var timeInput = document.getElementById("timeInput");
 
 var state = "STOP";
 var myInterval;
@@ -11,14 +12,23 @@ const PATH = "192.168.1.11";
 
 startButton.addEventListener("mouseup", function(){
     if (request !== undefined && request2 !== undefined && state !== "START") {
-        stopButton.style.border = null;
+        let valueRefresh = timeInput.value;
+       
+        if (valueRefresh === "" || valueRefresh  < 10) {
+            alert("Invalid refresh time. Cannot start!");
+            return;
+        }
 
+        stopButton.style.border = null;
+        timeInput.style.background = "#808080";
+        timeInput.disabled = true;
+        
         state = "START"
         this.classList.remove('mouse-down');
         this.style.borderColor = "#ffffff";
 
         sendRequests();
-        myInterval = setInterval(sendRequests, 2000);
+        myInterval = setInterval(sendRequests, valueRefresh);
     } else {
         // report error
     }
@@ -27,6 +37,8 @@ startButton.addEventListener("mouseup", function(){
 stopButton.addEventListener("mouseup", function(){
     if (request !== undefined && request2 !== undefined && state !== "STOP" ) {
         startButton.style.border = null;
+        timeInput.style.background = "#ffffff";
+        timeInput.disabled = false;
 
         state = "STOP"
         this.classList.remove('mouse-down');
@@ -45,7 +57,6 @@ function init () {
     request = new XMLHttpRequest();
     request2 = new XMLHttpRequest();
     
-
     const getNumber = (data) => {
         const regex = /(-*\d+\.?\d*)/;
         let value = regex.exec(data);
@@ -88,3 +99,4 @@ function sendRequests () {
 
 init();
 
+stopButton.style.borderColor = "#ffffff";
