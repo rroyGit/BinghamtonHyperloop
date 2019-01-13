@@ -3,9 +3,14 @@
 #### Binghamton Hyperloop GNC code necessary to communicate with the Binghamton Hyperloop Pod
 ##### Server/Client code
   - Node.js
-  - Express
-##### Socket code
   - C
+  ###### Web Service
+  - Cors
+  - Express
+  ###### Web Server
+  - Cors
+  - Express
+  - Mustache
 
 ##### Web service run
     nodejs index.js \<PORT\>  
@@ -19,8 +24,9 @@
     (dynamicData.js) change PATH variable to the device's network IP that the server is running on (e.g. 192.168.1.23)
     See below how to retrive the ip
 ##### Windows IPv4 address
-    Go to Windows Settings --> Network & Internet --> Wi-Fi --> Hardware Properties --> IPv4 address
+  - Go to Windows Settings --> Network & Internet --> Wi-Fi --> Hardware Properties --> IPv4 address  
+  - Enter *ipconfig* on command prompt and look for IPv4 address
 ##### Linux IPv4 address
-    Google it...
+  - Enter *ifconfig* on bash and look for *inet* address under appropriate wifi
 ##### Mac IPv4 address
     Google it...
