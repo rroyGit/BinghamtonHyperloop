@@ -67,8 +67,8 @@ function doReadTemp (app) {
 function doWriteTemp (app) {
   return errorWrap(async function(req, res) {
     try {
-      if (req.query.sensorId == null || req.query.sensorId.length === 0 
-        || req.query.value == null || req.query.value.length ===0) {
+      if (req.query.sensorId === null || req.query.sensorId.length === 0
+        || req.query.value === null || req.query.value.length === 0) {
         throw {
           isDomain: true,
           errorCode: `BAD_REQUEST`,
@@ -77,10 +77,9 @@ function doWriteTemp (app) {
       }
 
       const [sensorId, value] = [req.query.sensorId, req.query.value];
-    
       await app.locals.processor.writeFile(sensorId, value);
       res.send("GOOD");
-     
+      
     } catch(err) {
       console.log(err);
       res.send("BAD");
