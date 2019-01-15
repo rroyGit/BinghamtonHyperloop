@@ -4,20 +4,23 @@
 ##### Server/Client code
   - Node.js
   - C
-  ###### Web Service
+  ###### Web Service (node modules)
   - Cors
   - Express
-  ###### Web Server
-  - Cors
+  - *npm install cors express*
+  ###### Web Server (node modules)
+  - Axios
   - Express
+  - Multer
   - Mustache
-
+  - *npm install axios express multer mustache*
+  
 ##### Web service run
-    nodejs index.js \<PORT\>  
+    nodejs index.js <PORT>  
     nodejs index.js 3001
 
 ##### Web server run
-    nodejs index.js \<PORT\> \<HOST:PORT\>  
+    nodejs index.js <PORT> <HOST:PORT>  
     nodejs index.js 3002 http://localhost:3001
 
 ##### Running on devices connected to the same network
