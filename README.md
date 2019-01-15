@@ -33,3 +33,9 @@
   - Enter *ifconfig* on bash and look for *inet* address under appropriate wifi
 ##### Mac IPv4 address
     Google it...
+
+##### Linux Bash - Required dependencies before running after cloning
+    - Install nodejs (sudo apt install nodejs)
+    - Install node package manager (sudo apt install npm)
+    - Install the above node modules in the respective directories
+    - Run program using the respective run commands
