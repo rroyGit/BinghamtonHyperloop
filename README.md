@@ -2,8 +2,11 @@
 
 #### Binghamton Hyperloop GNC code necessary to communicate with the Binghamton Hyperloop Pod
 ##### Server/Client code
+  - JavaScript
   - Node.js
   - C
+  - HTML
+  - CSS
   ###### Web Service (node modules)
   - Cors
   - Express
@@ -33,8 +36,8 @@
 ##### Web service run
     nodejs index.js <PORT> <MongoDB URL>
     nodejs index.js 3001 mongodb://localhost:27017/GNCDatabase
-    *Name of the database: GNCDatabase*
-    *Collection(s): podTelemetry*
+  ###### Name of the database: *GNCDatabase*  
+  ###### Collection(s): *podTelemetry*
 
 ##### Web server run
     nodejs index.js <PORT> <HOST:PORT>  
