@@ -7,11 +7,17 @@ var timeInput = document.getElementById("timeInput");
 
 var state = "STOP";
 var myInterval;
+var connectionGood = true;
 
-const PATH = "192.168.1.11";
+const PATH = "149.125.69.160";
 
 startButton.addEventListener("mouseup", function(){
     if (request !== undefined && request2 !== undefined && state !== "START") {
+        if (!connectionGood) {
+            alert("Requests could not be sent, other server offline. Restart server!");
+            return;
+        }
+        
         let valueRefresh = timeInput.value;
        
         if (valueRefresh === "" || valueRefresh  < 10) {
@@ -28,7 +34,7 @@ startButton.addEventListener("mouseup", function(){
         this.style.borderColor = "#ffffff";
 
         sendRequests();
-        myInterval = setInterval(sendRequests, valueRefresh);
+        if (connectionGood) myInterval = setInterval(sendRequests, valueRefresh);
     } else {
         // report error
     }
@@ -87,13 +93,51 @@ function init () {
             sensor2Container.innerHTML = "ERROR";
         }
     }
+    // request.onreadystatechange = function() {
+    //     if (request.readyState === 4){   //if complete
+    //         if(request.status === 200){  //check if "OK" (200)
+    //             //success
+    //         } else {
+    //             connectionGood = false;
+    //             //alert("Requests could not be sent! !200");
+    //         }
+    //     } else {
+    //         connectionGood = false;
+    //         alert("Requests could not be sent, other server offline. Restart server! (1)");
+    //     }
+    // }
+
+    // request2.onreadystatechange = function() {
+    //     if (request2.readyState === 4){   //if complete
+    //         if(request2.status === 200){  //check if "OK" (200)
+    //             //success
+    //         } else {
+    //             connectionGood = false;
+    //             //alert("Requests could not be sent! !200");
+    //         }
+    //     } else {
+    //         connectionGood = false;
+    //         alert("Requests could not be sent, other server offline. Restart server! (2)");
+    //     }
+    // }
+
+    // request.onerror = function (e) {
+    //     connectionGood = false;
+    //     //alert("Requests could not be sent! onerror");
+    // }
+
+    // request2.onerror = function (e) {
+    //     connectionGood = false;
+    //     //alert("Requests could not be sent! onerror");
+    // }
+    
 }
 
 function sendRequests () {
     request.open("GET", `http://${PATH}:3002/temp/1`);
     request2.open("GET", `http://${PATH}:3002/temp/2`);
 
-    request.send();
+    request.send(); 
     request2.send();
 }
 

@@ -7,17 +7,34 @@
   ###### Web Service (node modules)
   - Cors
   - Express
-  - *npm install cors express*
+  - MongoDB
+  - *npm install cors express mongodb*
   ###### Web Server (node modules)
   - Axios
   - Express
   - Multer
   - Mustache
   - *npm install axios express multer mustache*
-  
+
+##### Install MongoDB (Linux package)
+  ###### Download MongoDB Package
+    sudo apt install mongodb-server-core
+  ###### Create data directory
+    sudo mkdir ~/data/
+    sudo mkdir ~/data/db
+  ###### Run MongoDB (local host - port: 27017)
+    sudo mongod --dbpath ~/data/db
+  ###### Install Mongo client
+    sudo apt install mongodb-clients
+  ###### Run Mongo console
+    mongo console
+
+
 ##### Web service run
-    nodejs index.js <PORT>  
-    nodejs index.js 3001
+    nodejs index.js <PORT> <MongoDB URL>
+    nodejs index.js 3001 mongodb://localhost:27017/GNCDatabase
+    *Name of the database: GNCDatabase*
+    *Collection(s): podTelemetry*
 
 ##### Web server run
     nodejs index.js <PORT> <HOST:PORT>  

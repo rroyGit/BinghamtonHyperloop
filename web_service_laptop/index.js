@@ -6,8 +6,10 @@ const {promisify} = require('util'); // tranform regular functions to return pro
 const readFile = promisify(require('fs').readFile); // make readFile() async
 const writeFile = promisify(require('fs').writeFile); // make writeFile() async
 const Path = require('path');
+
 const pcServer = require("./pc_server");
 const processor = require("./processor");
+const PCDatabase = require('./pc_database');
 
 function usage () {
     console.error("usage: %s PORT", Path.basename(process.argv[1]));
@@ -53,8 +55,16 @@ async function go(args) {
     const resources = {};
     try {
       const port = getPort(args[0]);
+      const dbUrl = args[1];
       const file_processor = processor.init();
-      resources.server = pcServer.init(port, file_processor);
+
+      const pcDatabase = new PCDatabase(dbUrl);
+
+      await pcDatabase.init();
+      await pcDatabase.close();
+
+
+      resources.server = pcServer.init(port, file_processor, pcDatabase);
       await writeFile(PID_FILE, `${process.pid}\n`);
     }
     catch (err) {
@@ -66,7 +76,7 @@ async function go(args) {
   }
 
 
-if (process.argv.length < 3) { 
+if (process.argv.length < 4) { 
     usage();
 } else {
     // argv[0] = /usr/local/bin/node

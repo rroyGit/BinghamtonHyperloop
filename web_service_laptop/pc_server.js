@@ -7,6 +7,7 @@ const process = require('process');
 const url = require('url');
 const queryString = require('querystring');
 
+
 const OK = 200;
 const CREATED = 201;
 const BAD_REQUEST = 400;
@@ -18,8 +19,8 @@ const SERVER_ERROR = 500;
 //Main URLs
 const TEMP = '/temp';
 
-function init (port, processor) {
-    
+function init (port, processor, pcDatabase) {
+  
     const app = express();
     app.locals.port = port;
     app.locals.processor = processor;
