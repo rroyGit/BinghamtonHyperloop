@@ -37,7 +37,7 @@
     nodejs index.js <PORT> <MongoDB URL>
     nodejs index.js 3001 mongodb://localhost:27017/GNCDatabase
   ###### Name of the database: *GNCDatabase*  
-  ###### Collection(s): *podTelemetry*
+  ###### Collection(s): *Temperature*
 
 ##### Web server run
     nodejs index.js <PORT> <HOST:PORT>  

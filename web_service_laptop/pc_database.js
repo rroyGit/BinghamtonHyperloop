@@ -41,7 +41,7 @@ class GNCDatabase {
 
     // create collection for storing various telemetry data such as temperature readings
 
-    this.telemetryDataCollection = await this.createCollection("podTelemetry");
+    this.telemetryTempCollection = await this.createCollection("Temperature");
   }
 
   /** Release all resources held by this doc-finder.  Specifically,
@@ -65,6 +65,30 @@ class GNCDatabase {
 
   async createCollection(collectionName) {
     return await this.databaseConnection.createCollection(collectionName);
+  }
+
+  // ------------------------------------------------------------------------------------
+
+  async writeTemp(sensorId, sensorValue) {
+    try {
+        await this.telemetryTempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in Database: ${this.databaseName} Collection: temperature`;
+    }
+  }
+
+  async readLastTemp(sensorID) {
+    try {
+        const document = await this.telemetryTempCollection.findOne({"sensorID": sensorID}, { sort: { _id: -1 }, limit: 1 });
+        if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorID}`;
+
+        const sensorValue = document.sensorValue;
+        return sensorValue;
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in Database: ${this.databaseName} Collection: temperature`;
+    }
   }
 
 }

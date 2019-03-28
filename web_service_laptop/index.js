@@ -61,6 +61,9 @@ async function go(args) {
       const pcDatabase = new PCDatabase(dbUrl);
 
       await pcDatabase.init();
+
+      await pcDatabase.clear();
+
       await pcDatabase.close();
 
 
