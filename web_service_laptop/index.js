@@ -32,9 +32,10 @@ async function shutdown(event, resources) {
         await resources.server.close();
         delete resources.server;
       }
-      if (resources.finder) {
-        await resources.finder.close();
-        delete resources.finder;
+      if (resources.databaseConnection) {
+        await resources.databaseConnection.clear();
+        await resources.databaseConnection.close();
+        delete resources.databaseConnection;
       }
       if (resources.timer) {
         clearInterval(resources.timer);
@@ -59,13 +60,8 @@ async function go(args) {
       const file_processor = processor.init();
 
       const pcDatabase = new PCDatabase(dbUrl);
-
+      resources.databaseConnection = pcDatabase;
       await pcDatabase.init();
-
-      await pcDatabase.clear();
-
-      await pcDatabase.close();
-
 
       resources.server = pcServer.init(port, file_processor, pcDatabase);
       await writeFile(PID_FILE, `${process.pid}\n`);

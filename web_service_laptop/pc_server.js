@@ -18,12 +18,16 @@ const SERVER_ERROR = 500;
 
 //Main URLs
 const TEMP = '/temp';
+const DATABASE_CLOSE = '/closeDB';
+const DATABASE_CLEAR = '/clearDB';
 
 function init (port, processor, pcDatabase) {
   
     const app = express();
     app.locals.port = port;
     app.locals.processor = processor;
+    app.locals.pcDatabase = pcDatabase;
+
     setupRoutes(app);
     
     const server = app.listen(port, async function() {
@@ -39,13 +43,20 @@ function setupRoutes(app) {
     app.use(bodyParser.json());  //all incoming bodies are JSON
     
     
-    // get temp reading from file
+    // get last temp reading with approp. sensorId
     // (e.g. /temp/1)
     app.get(`${TEMP}/:sensorId`, doReadTemp(app));
 
-    // write temp readings to file
+    // write temp readings with its sensorId
     // (e.g. /temp?sensorId=1&value=67)
     app.get(`${TEMP}?`, doWriteTemp(app));
+
+    // close database
+    app.get(`${DATABASE_CLOSE}`, closeDatabase(app));
+
+    // clear database
+    app.get(`${DATABASE_CLEAR}`, clearDatabase(app));
+
     app.use(doErrors()); //must be last; setup for server errors   
 }
 
@@ -54,8 +65,11 @@ function doReadTemp (app) {
     try {
       const sensorId = req.params.sensorId; 
       
-      const fileName = `temp${sensorId}.txt`;
-      const value = await app.locals.processor.readFile(fileName);
+      //const fileName = `temp${sensorId}.txt`;
+      //const value = await app.locals.processor.readFile(fileName);
+
+      const value = await app.locals.pcDatabase.readLastTemp(sensorId);
+
       res.send(value);
      
     } catch(err) {
@@ -78,7 +92,10 @@ function doWriteTemp (app) {
       }
 
       const [sensorId, value] = [req.query.sensorId, req.query.value];
+
       await app.locals.processor.writeFile(sensorId, value);
+      await app.locals.pcDatabase.writeTemp(sensorId,value);
+
       res.send("GOOD");
       
     } catch(err) {
@@ -88,88 +105,102 @@ function doWriteTemp (app) {
   });
 }
 
+function closeDatabase (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      await app.locals.pcDatabase.close();
+      res.send("GOOD");
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
 
-
-
-
-
-
-
-
+function clearDatabase (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      await app.locals.pcDatabase.clearDatabase();
+      res.send("GOOD");
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
 
 
 //------------------------------------ERROR HANDLING INIT--------------------------------
 function getError (err) {
-    let errorObj;
-  
-    if (err.isDomain) {
-      let statusType;
-      switch (err.errorCode) {
-        case "NOT_FOUND" : 
-          statusType = NOT_FOUND;
-          break;
-        case "EXISTS" : 
-          statusType = CONFLICT;
-          break;  
-        default: 
-          statusType = BAD_REQUEST;
-      }
-  
-      errorObj = {
-        status: statusType,
-        code: err.errorCode,
-        message: err.message
-      }
-    } else {
-      errorObj = {
-        status: SERVER_ERROR,
-        code: `INTERNAL`,
-        message: err.toString(),
-      }
+  let errorObj;
+
+  if (err.isDomain) {
+    let statusType;
+    switch (err.errorCode) {
+      case "NOT_FOUND" : 
+        statusType = NOT_FOUND;
+        break;
+      case "EXISTS" : 
+        statusType = CONFLICT;
+        break;  
+      default: 
+        statusType = BAD_REQUEST;
     }
-  
-    return errorObj;
+
+    errorObj = {
+      status: statusType,
+      code: err.errorCode,
+      message: err.message
+    }
+  } else {
+    errorObj = {
+      status: SERVER_ERROR,
+      code: `INTERNAL`,
+      message: err.toString(),
+    }
+  }
+
+  return errorObj;
 }
   
   /** Return error handler which ensures a server error results in nice
    *  JSON sent back to client with details logged on console.
    */ 
 function doErrors(app) {
-    return async function(err, req, res, next) {
-   
-      // catch JSON syntax error
-      if (err instanceof SyntaxError) {
-        const error = {error: "Invalid JSON", tips: "Check if body has correct JSON syntax" }
-        res.statusCode = BAD_REQUEST;
-        res.json(error);
-      } else {
-        res.status(SERVER_ERROR);
-        res.json({ code: 'SERVER_ERROR', message: err.message });
-        console.error(err);
-      }
-    };
+  return async function(err, req, res, next) {
+  
+    // catch JSON syntax error
+    if (err instanceof SyntaxError) {
+      const error = {error: "Invalid JSON", tips: "Check if body has correct JSON syntax" }
+      res.statusCode = BAD_REQUEST;
+      res.json(error);
+    } else {
+      res.status(SERVER_ERROR);
+      res.json({ code: 'SERVER_ERROR', message: err.message });
+      console.error(err);
+    }
+  };
 }
   
   /** Set up error handling for handler by wrapping it in a 
    *  try-catch with chaining to error handler on error.
    */
 function errorWrap(handler) {
-    return async (req, res, next) => {
-      try {
-        await handler(req, res, next);
-      }
-      catch (err) {
-        next(err);
-      }
-    };
+  return async (req, res, next) => {
+    try {
+      await handler(req, res, next);
+    }
+    catch (err) {
+      next(err);
+    }
+  };
 }
   
   /** Return base URL of req for path.
    *  Useful for building links; Example call: baseUrl(req, TEMP)
    */
 function baseUrl(req, path='/') {
-    const port = req.app.locals.port;
-    const url = `${req.protocol}://${req.hostname}:${port}${path}`;
-    return url;
+  const port = req.app.locals.port;
+  const url = `${req.protocol}://${req.hostname}:${port}${path}`;
+  return url;
 }
-  

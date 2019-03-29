@@ -25,13 +25,12 @@
   ###### Create data directory
     sudo mkdir ~/data/
     sudo mkdir ~/data/db
-  ###### Run MongoDB (local host - port: 27017)
+  ###### Run MongoDB server (local host - port: 27017)
     sudo mongod --dbpath ~/data/db
   ###### Install Mongo client
     sudo apt install mongodb-clients
   ###### Run Mongo console
     mongo console
-
 
 ##### Web service run
     nodejs index.js <PORT> <MongoDB URL>
@@ -59,3 +58,18 @@
     - Install node package manager (sudo apt install npm)
     - Install the above node modules in the respective directories
     - Run program using the respective run commands
+
+##### Steps (ordered) to run application properly 
+  - Run MongoDB server
+  - Run Web service
+  - Run Web server
+
+##### Reminders
+  - Shutdown Web service via Ctrl+C to automatically clear and close database connection
+    - You will still have to manually shutdown MangoDB server
+
+##### MongoDB client tips
+  - *show dbs* : list all found databases
+  - *use <name_of_database>* : select database where keyword *db* refers to selected database
+  - *show collections* : once a database is selected, this will show collections that exist in the database
+  - *use admin* & *db.shutdownServer()* : shutdown MongoDB server

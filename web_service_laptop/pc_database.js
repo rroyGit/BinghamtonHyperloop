@@ -48,18 +48,21 @@ class GNCDatabase {
    *  close any database connections.
    */
   async close() {
-    await this.mongoDBConnection.close();
-    console.log("Closed our MongoDB connection");
+    if (this.mongoDBConnection != null) 
+        await this.mongoDBConnection.close();
+    console.log("MongoDB connection closed");
   }
 
   /** Clear database */
   async clear() {
-    let collectionArray = await this.databaseConnection.listCollections().toArray();
-    let iter = collectionArray.map(collection => (collection.name)).entries();
+    if (this.databaseConnection != null) {
+        let collectionArray = await this.databaseConnection.listCollections().toArray();
+        let iter = collectionArray.map(collection => (collection.name)).entries();
 
-    let collectionEntry;
-    while (collectionEntry = iter.next().value) {
-      await this.databaseConnection.dropCollection(collectionEntry[1]);
+        let collectionEntry;
+        while (collectionEntry = iter.next().value) {
+        await this.databaseConnection.dropCollection(collectionEntry[1]);
+        }
     }
   }
 
@@ -78,10 +81,10 @@ class GNCDatabase {
     }
   }
 
-  async readLastTemp(sensorID) {
+  async readLastTemp(sensorId) {
     try {
-        const document = await this.telemetryTempCollection.findOne({"sensorID": sensorID}, { sort: { _id: -1 }, limit: 1 });
-        if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorID}`;
+        const document = await this.telemetryTempCollection.findOne({"sensorID": sensorId}, { sort: { _id: -1 }, limit: 1 });
+        if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorId}`;
 
         const sensorValue = document.sensorValue;
         return sensorValue;
