@@ -106,15 +106,16 @@ function getTemp(app) {
     try {
 
       const sensorId = req.params.sensorId;
-      const contentData = await app.locals.model.getTemp(sensorId);
+      const sensorValue = await app.locals.model.getTemp(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
-      res.send(contentData);
+      
+      res.send(`${sensorValue}`);
     }
     catch (err) {
       console.error(err);
-      console.log("ERROR in teleData");
+      console.log("ERROR in pc_server");
     }
   });
 }

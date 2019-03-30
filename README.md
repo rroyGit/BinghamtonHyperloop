@@ -43,9 +43,6 @@
     nodejs index.js <PORT> <HOST:PORT>  
     nodejs index.js 3002 http://localhost:3001
 
-##### Running on devices connected to the same network
-    (dynamicData.js) change PATH variable to the device's network IP that the server is running on (e.g. 192.168.1.23)
-    See below how to retrive the ip
 ##### Windows IPv4 address
   - Go to Windows Settings --> Network & Internet --> Wi-Fi --> Hardware Properties --> IPv4 address  
   - Enter *ipconfig* on command prompt and look for IPv4 address
@@ -61,10 +58,23 @@
     - *CD* to directory containing *package.json* and enter *npm install*
   - Run program using the respective run commands
 
-##### Steps (ordered) to run application properly 
+##### Open Application
+  - Open browser (ideally Google Chrome) and enter either:
+    - http://<Device Physical IP>:3002/
+    - http://<Device Physical IP>:3002/home/
+    - http://<Device Physical IP>:3002/home/model
+
+##### Update PATH variable
+  - For dynamicData.js & chartData.js 
+    - Change PATH variable to the Device's Network IP that the server/service is running on (e.g. 192.168.1.23)
+    - See above how to retrive the device's IP Addrress
+
+##### Steps (ordered) to run application properly
+  - Update PATH variable
   - Run MongoDB server
   - Run Web service
   - Run Web server
+  - Open application
 
 ##### Reminders
   - Shutdown Web service via Ctrl+C to automatically clear and close database connection

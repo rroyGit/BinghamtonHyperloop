@@ -73,8 +73,8 @@ function doReadTemp (app) {
       res.send(value);
      
     } catch(err) {
-      res.send("BAD");
       console.log(err);
+      res.send("BAD");
     }
   });
 }

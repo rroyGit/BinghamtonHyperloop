@@ -18,6 +18,7 @@ VisualWS.prototype.getTemp = async function (sensorId) {
     const response = await axios.get(url);
 
     return response.data;
+
   }
   catch (err) {
     console.error(err);

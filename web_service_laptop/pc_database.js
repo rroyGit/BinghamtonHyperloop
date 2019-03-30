@@ -40,8 +40,12 @@ class GNCDatabase {
     this.databaseConnection = await this.mongoDBConnection.db(this.databaseName);
 
     // create collection for storing various telemetry data such as temperature readings
-
     this.telemetryTempCollection = await this.createCollection("Temperature");
+
+
+    // init value to -1
+    await this.writeTemp('1','-1');
+    await this.writeTemp('2','-1');
   }
 
   /** Release all resources held by this doc-finder.  Specifically,
@@ -77,20 +81,20 @@ class GNCDatabase {
         await this.telemetryTempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
     } catch (err){
         console.log(err);
-        throw `One or more errors in Database: ${this.databaseName} Collection: temperature`;
+        throw `One or more errors in writing Database: ${this.databaseName} Collection: temperature`;
     }
   }
 
   async readLastTemp(sensorId) {
     try {
-        const document = await this.telemetryTempCollection.findOne({"sensorID": sensorId}, { sort: { _id: -1 }, limit: 1 });
+        const document = await this.telemetryTempCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
         if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorId}`;
 
         const sensorValue = document.sensorValue;
         return sensorValue;
     } catch (err){
         console.log(err);
-        throw `One or more errors in Database: ${this.databaseName} Collection: temperature`;
+        throw `One or more errors in reading Database: ${this.databaseName} Collection: temperature`;
     }
   }
 

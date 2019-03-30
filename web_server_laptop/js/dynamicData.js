@@ -9,9 +9,9 @@ var state = "STOP";
 var myInterval;
 var connectionGood = true;
 
-const PATH = "149.125.69.160";
+const PATH = "149.125.70.21";
 
-startButton.addEventListener("mouseup", function(){
+startButton.addEventListener("mouseup", function() {
     if (request !== undefined && request2 !== undefined && state !== "START") {
         if (!connectionGood) {
             alert("Requests could not be sent, other server offline. Restart server!");
@@ -40,7 +40,7 @@ startButton.addEventListener("mouseup", function(){
     }
 });
 
-stopButton.addEventListener("mouseup", function(){
+stopButton.addEventListener("mouseup", function() {
     if (request !== undefined && request2 !== undefined && state !== "STOP" ) {
         startButton.style.border = null;
         timeInput.style.background = "#ffffff";
