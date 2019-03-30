@@ -17,7 +17,8 @@
   - Express
   - Multer
   - Mustache
-  - *npm install axios express multer mustache*
+  - Chart.js
+  - *npm install axios express multer mustache chart.js*
 
 ##### Install MongoDB (Linux package)
   ###### Download MongoDB Package
@@ -54,10 +55,11 @@
     Google it...
 
 ##### Linux Bash - Required dependencies before running after cloning
-    - Install nodejs (sudo apt install nodejs)
-    - Install node package manager (sudo apt install npm)
-    - Install the above node modules in the respective directories
-    - Run program using the respective run commands
+  - Install nodejs (sudo apt install nodejs)
+  - Install node package manager (sudo apt install npm)
+  - Install the above node modules in the respective directory
+    - *CD* to directory containing *package.json* and enter *npm install*
+  - Run program using the respective run commands
 
 ##### Steps (ordered) to run application properly 
   - Run MongoDB server

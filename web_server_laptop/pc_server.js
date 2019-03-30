@@ -4,7 +4,7 @@ const express = require('express');
 const upload = require('multer')();
 const fs = require('fs');
 const mustache = require('mustache');
-const Path = require('path');
+const path = require('path');
 const { URL } = require('url');
 
 const bodyParser = require('body-parser');
@@ -24,9 +24,13 @@ function serve(port, base, model) {
   app.locals.port = port;
   app.locals.base = base;
   app.locals.model = model;
+
+
   process.chdir(__dirname);
- 
+  // base = '/home'
   app.use(base, express.static(__dirname));
+  
+  
   app.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -42,23 +46,53 @@ function serve(port, base, model) {
 module.exports = serve;
 
 /******************************** Routes *******************************/
+const INDEX_PAGE = '/';
+const MODEL_PAGE = '/home/model';
 
 function setupRoutes(app) {
-  // @routes
-  const base = app.locals.base;
-  app.get(`/`, toHomepage(app));
   
-  // get file content
+  const BASE = app.locals.base;
+
+  app.get(INDEX_PAGE, redirectHome(app));
+  
+  // BASE = 'home/'
+  app.get(BASE, toHomePage(app));
+  app.get(MODEL_PAGE, toModelPage(app));
+
+  
+  // web service routes
   app.get(`/temp/:sensorId`, getTemp(app));
 
   app.use(doErrors()); //must be last - setup for server errors
 }
 
 /*************************** Action Routines ***************************/
-function toHomepage(app) {
+function redirectHome(app) {
   return errorWrap(async function(req, res) {
     try {
-      res.redirect(`${app.locals.base}/`);
+      res.redirect(app.locals.base);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+}
+
+function toHomePage(app) {
+  return errorWrap(async function(req, res) {
+    try {
+      res.sendFile(path.join(__dirname+'/statics/index.html'));
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+}
+
+function toModelPage(app) {
+  return errorWrap(async function(req, res) {
+    try {
+      res.sendFile(path.join(__dirname+'/statics/model.html'));
     }
     catch (err) {
       console.error(err);
