@@ -1,0 +1,5 @@
+sensorId: 1 value: 45
+sensorId: 2 value: 100
+sensorId: 2 value: 20
+sensorId: 2 value: 245
+sensorId: 2 value: 27

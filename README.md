@@ -51,12 +51,18 @@
 ##### Mac IPv4 address
     Google it...
 
-##### Linux Bash - Required dependencies before running after cloning
+##### Linux Bash - Required dependencies before running but after cloning
   - Install nodejs (sudo apt install nodejs)
   - Install node package manager (sudo apt install npm)
   - Install the above node modules in the respective directory
     - *CD* to directory containing *package.json* and enter *npm install*
-  - Run program using the respective run commands
+
+##### Steps (ordered) to run application properly
+  - Update PATH variable (if NOT running on localhost)
+  - Run MongoDB server
+  - Run Web service
+  - Run Web server
+  - Open application
 
 ##### Open Application
   - Open browser (ideally Google Chrome) and enter either:
@@ -69,16 +75,9 @@
     - Change PATH variable to the Device's Network IP that the server/service is running on (e.g. 192.168.1.23)
     - See above how to retrive the device's IP Addrress
 
-##### Steps (ordered) to run application properly
-  - Update PATH variable
-  - Run MongoDB server
-  - Run Web service
-  - Run Web server
-  - Open application
-
 ##### Reminders
   - Shutdown Web service via Ctrl+C to automatically clear and close database connection
-    - You will still have to manually shutdown MangoDB server
+    - You will still have to manually shutdown MangoDB server using *use admin* & *db.shutdownServer* on mongo console
 
 ##### MongoDB client tips
   - *show dbs* : list all found databases

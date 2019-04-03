@@ -9,15 +9,12 @@ var sensor2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var sensor3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var sensor4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-const PATH = "localhost";
+const PATH = "149.125.70.21";
 
 var state = "STOP";
 var myInterval;
 var connectionGood = true;
 
-
-Chart.defaults.global.defaultFontColor = 'white';
-Chart.defaults.global.defaultFontSize = 16;
 var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
@@ -33,17 +30,17 @@ var chart = new Chart(ctx, {
         }, {
             label: 'Sensor 2',
             
-            borderColor: 'rgb(150, 169, 132)',
+            borderColor: 'rgb(100, 99, 132)',
             data: sensor2
         }, {
             label: 'Sensor 3',
             
-            borderColor: 'rgb(70, 170, 132)',
+            borderColor: 'rgb(150, 99, 132)',
             data: sensor3
         }, {
             label: 'Sensor 4',
             
-            borderColor: 'rgb(250, 99, 132)',
+            borderColor: 'rgb(200, 99, 132)',
             data: sensor4
         }
     
@@ -64,15 +61,13 @@ var chart = new Chart(ctx, {
                 },
                 scaleLabel: {
                     display: true,
-                    labelString: 'Temperature',
-                    fontColor: 'white'
+                    labelString: 'Temperature'
                 }
             }],
             xAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Readings',
-                    fontColor: 'white'
+                    labelString: 'Readings'
                 }
             }]
         }

@@ -5,13 +5,11 @@ var startButton = document.getElementById("startButton");
 var stopButton = document.getElementById("stopButton");
 var timeInput = document.getElementById("timeInput");
 
-
 var state = "STOP";
 var myInterval;
 var connectionGood = true;
 
-//const PATH = "149.125.70.21";
-const PATH = "localhost";
+const PATH = "149.125.70.21";
 
 startButton.addEventListener("mouseup", function() {
     if (request !== undefined && request2 !== undefined && state !== "START") {

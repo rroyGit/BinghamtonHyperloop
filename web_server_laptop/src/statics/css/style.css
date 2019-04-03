@@ -165,63 +165,6 @@ button:focus {outline:0;}
     transform: translate(0px, 25px);
 }
 
-.options {
-    margin-top: -40px;
-    margin-right: 10%;
-    float: right;
-}
-
-.optionsButton {
-    padding-left: 10px;
-    margin-left: 10px;
-    padding-right: 10px;
-
-    color: white;
-    border: 0.16em solid rgba(255,255,255,0);
-    border-radius: .75em;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bold;
-
-    color:#FFFFFF;
-    text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
-    
-    transition: all 0.2s;
-
-    font-size: 130%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.optionsButton:hover {
-    cursor: pointer;
-    border-color: lightblue;
-}
-
-.optionsButton:active {
-    vertical-align: top;
-    padding: 8px;
-}
-
-.optionsButton:focus {
-    border-color: lightgray;
-}
-
-
-
-#temp {
-    background: rgb(28, 100, 65);
-}
-
-#dist, #model {
-    background: rgb(20, 100, 200); 
-}
-
-#speed {
-    background: rgb(203, 117, 20);
-}
-
-
 #timeInput {
     height: 26px;
     width: 25%;
@@ -272,12 +215,4 @@ button:focus {outline:0;}
     text-align: center;
   
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-#myChart {
-    padding: 10px;
-    width: 300px;
-    margin: 0 auto;
-    vertical-align: middle;
-    
 }

@@ -4,7 +4,7 @@
     <title>GNC Hub</title>
     <link rel="icon" href="https://www.logolynx.com/images/logolynx/3f/3f4b21cb4c608e21f3bf4fbad4b902ed.png" type="image/png">
 
-    <link type="text/css" rel="stylesheet" href="statics/css/style.css">
+    <link type="text/css" rel="stylesheet" href="../src/statics/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i" rel="stylesheet">
     
@@ -26,17 +26,10 @@
             <input id="timeInput" type="number" value="2000">
           </span> 
       </div>
-      
-      <div>
-        <button class="buttons" id="startButton">Start</button>
-        <div class="divider"></div>
-        <button class="buttons" id="stopButton">Stop</button>
-      </div>
 
-      <div class="options">
-          <a href='http://localhost:3002/home/model' class="optionsButton" id="model">Model Page</a> 
-      </div>
-
+      <button class="buttons" id="startButton">Start</button>
+      <div class="divider"></div>
+      <button class="buttons" id="stopButton">Stop</button>
     </div>
 
     <h2 class="headerSensor" id="tempHeader">Temperature</h2>
@@ -123,12 +116,7 @@
       </div>
     </div>
 
+   <!-- <script src="js/dynamicData.js"></script> -->
 
-
-
-
-
-    <script src="js/dynamicData.js"></script>
-
-  </body>
+  <script type="text/javascript" src="main.js"></script></body>
 </html>
