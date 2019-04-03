@@ -11,14 +11,24 @@
   - Cors
   - Express
   - MongoDB
-  - *npm install cors express mongodb*
+  - *npm install cors express mongodb --save*
   ###### Web Server (node modules)
+  - Webpack
+  - React
   - Axios
   - Express
   - Multer
   - Mustache
   - Chart.js
-  - *npm install axios express multer mustache chart.js*
+  - *npm install axios express multer mustache chart.js --save*
+  - *npm install webpack webpack-cliwebpack-cli --save-dev*
+  - *npm install @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev*
+  - *npm install react react-dom --save-dev*
+  - *npm install prop-types --save-dev*
+  - *npm install html-webpack-plugin html-loader --save-dev*
+  - *npm install @babel/runtime --save-dev*
+  - *npm install @babel/plugin-transform-runtime --save-dev*
+  - *npm install webpack-dev-server --save-dev*
 
 ##### Install MongoDB (Linux package)
   ###### Download MongoDB Package
@@ -68,6 +78,8 @@
   - For dynamicData.js & chartData.js 
     - Change PATH variable to the Device's Network IP that the server/service is running on (e.g. 192.168.1.23)
     - See above how to retrive the device's IP Addrress
+##### Babel
+- npm install @babel/preset-env --save-dev
 
 ##### Steps (ordered) to run application properly
   - Update PATH variable
@@ -85,3 +97,6 @@
   - *use <name_of_database>* : select database where keyword *db* refers to selected database
   - *show collections* : once a database is selected, this will show collections that exist in the database
   - *use admin* & *db.shutdownServer()* : shutdown MongoDB server
+
+  "start": "nodejs ./src/index.js 3002 http://localhost:3001",
+  "start": "webpack-dev-server --open --mode development",
