@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "browserify": "^16.2.3",
     "chart.js": "^2.8.0",
     "express": "^4.16.4",
     "multer": "^1.4.1",

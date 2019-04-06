@@ -1,13 +1,10 @@
+const Temperature = require('./Temperature');
+
 var ctx = document.getElementById('myChart').getContext('2d');
 
 var startButton = document.getElementById("startButton");
 var stopButton = document.getElementById("stopButton");
 var timeInput = document.getElementById("timeInput");
-
-var sensor1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-var sensor2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-var sensor3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-var sensor4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const PATH = "localhost";
 
@@ -15,145 +12,30 @@ var state = "STOP";
 var myInterval;
 var connectionGood = true;
 
-
-Chart.defaults.global.defaultFontColor = 'white';
-Chart.defaults.global.defaultFontSize = 16;
-var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'line',
-
-    // The data for our dataset
-    data: {
-        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-        datasets: [{
-            label: 'Sensor 1',
-            
-            borderColor: 'rgb(50, 99, 132)',
-            data: sensor1
-        }, {
-            label: 'Sensor 2',
-            
-            borderColor: 'rgb(150, 169, 132)',
-            data: sensor2
-        }, {
-            label: 'Sensor 3',
-            
-            borderColor: 'rgb(70, 170, 132)',
-            data: sensor3
-        }, {
-            label: 'Sensor 4',
-            
-            borderColor: 'rgb(250, 99, 132)',
-            data: sensor4
-        }
-    
-        ]
-    },
-
-    // Configuration options go here
-    options: {
-        responsive: false,
-        scales: {
-            
-            yAxes: [{
-                ticks: {
-                    callback: function(value, index, values) {
-                        return value + ' °f';
-                    },
-                    suggestedMax: 150
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Temperature',
-                    fontColor: 'white'
-                }
-            }],
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Readings',
-                    fontColor: 'white'
-                }
-            }]
-        }
-    }
-});
-
-function updateDataArray2 (array, newValue) {
-    // last 9 elts
-    temp = array.slice(1);
-    array.length = 0;
-    let a = temp.concat([newValue]);
-    array.push(a);
-}
-
-function updateDataArray (array, newValue) {
-    // last 9 elts
-    temp = array.slice(1);
-    return temp.concat([newValue]);
-}
-
-var requestSensor1;
-var requestSensor2;
-
 function init () {
-    requestSensor1 = new XMLHttpRequest();
-    requestSensor2 = new XMLHttpRequest();
+    let currentClass = new Temperature(ctx);
+    let numSensors = 2;
+    let numPreviousTimes = 10;
     
-    const getNumber = (data) => {
-        const regex = /(-*\d+\.?\d*)/;
-        let value = regex.exec(data);
+    currentClass.init(numSensors, numPreviousTimes);
+    currentClass.setChartAxis(timeInput.value);
 
-        if (value === null) return null;
-        
-        value = value[1];
-        if (value.slice(-1) === '.') value + '0';
-        return value;
-    }
-
-    requestSensor1.onload = function () {
-       
-        let value;
-        if ((value = getNumber(requestSensor1.responseText)) != null) {
-            chart.data.datasets[0].data = updateDataArray(sensor1, value);
-        } else {
-            chart.data.datasets[0].data = updateDataArray(sensor1, -1);
-        }
-        
-        sensor1 = chart.data.datasets[0].data;
-        chart.update();
-    }
-
-    requestSensor2.onload = function () {
-        
-        let value;
-        if ((value = getNumber(requestSensor2.responseText)) != null) {
-            chart.data.datasets[1].data = updateDataArray(sensor2, value);
-        } else {
-            chart.data.datasets[1].data = updateDataArray(sensor2, -1);
-        }
-        sensor2 = chart.data.datasets[1].data;
-        chart.update();
-    }
+    startButton.addEventListener("mouseup", () => {startAction(currentClass, startButton);} );
+    stopButton.addEventListener("mouseup", () => {stopAction(stopButton);} );
 }
 
-function sendRequests () {
-    requestSensor1.open("GET", `http://${PATH}:3002/temp/1`);
-    requestSensor2.open("GET", `http://${PATH}:3002/temp/2`);
+const startAction = (currentClass, context) => {
 
-    requestSensor1.send(); 
-    requestSensor2.send();
-}
+    if (state == "STOP") {
 
-startButton.addEventListener("mouseup", function() {
-
-    if (requestSensor1 !== undefined && requestSensor2 !== undefined && state !== "START") {
         if (!connectionGood) {
             alert("Requests could not be sent, other server offline. Restart server!");
             return;
         }
         
         let valueRefresh = timeInput.value;
+
+        currentClass.setChartAxis(valueRefresh);
        
         if (valueRefresh === "" || valueRefresh  < 10) {
             alert("Invalid refresh time. Cannot start!");
@@ -164,32 +46,32 @@ startButton.addEventListener("mouseup", function() {
         timeInput.style.background = "#808080";
         timeInput.disabled = true;
         
-        state = "START"
-        this.classList.remove('mouse-down');
-        this.style.borderColor = "#ffffff";
+        context.classList.remove('mouse-down');
+        context.style.borderColor = "#ffffff";
 
-        sendRequests();
-        if (connectionGood) myInterval = setInterval(sendRequests, valueRefresh);
+        currentClass.sendRequests(PATH);
+        if (connectionGood) myInterval = setInterval(() => (currentClass.sendRequests(PATH)), valueRefresh);
+        state = "START"
     } else {
         // report error
     }
-});
+}
 
-stopButton.addEventListener("mouseup", function() {
-    if (requestSensor1 !== undefined && requestSensor2 !== undefined && state !== "STOP" ) {
+const stopAction = (context) => {
+    if (state == "START" ) {
         startButton.style.border = null;
         timeInput.style.background = "#ffffff";
         timeInput.disabled = false;
 
-        state = "STOP"
-        this.classList.remove('mouse-down');
-        this.style.borderColor = "#ffffff";
+        context.classList.remove('mouse-down');
+        context.style.borderColor = "#ffffff";
 
         clearInterval(myInterval);
+        state = "STOP";
     } else {
         // report error
     }
-});
+}
 
 init();
 

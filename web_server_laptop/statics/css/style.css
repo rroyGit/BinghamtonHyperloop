@@ -64,11 +64,14 @@ button:focus {outline:0;}
 
 #startButton {
     background-color: green;
-    margin-left: -27.75%;
+    float: left;
+    margin-left: 10%;
+    
 }
 
 #stopButton {
     background-color: #db1837;
+    margin-left: -35%;
 }
 
 .buttons:hover {
