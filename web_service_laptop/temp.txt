@@ -22,3 +22,11 @@ sensorId: 1 value: 20
 sensorId: 2 value: 200
 sensorId: 2 value: 20
 sensorId: 2 value: 200
+sensorId: 2 value: 100
+sensorId: 1 value: 45
+sensorId: 1 value: 200
+sensorId: 1 value: 50
+sensorId: 1 value: 89
+sensorId: 1 value: 78
+sensorId: 1 value: 77
+sensorId: 1 value: 65

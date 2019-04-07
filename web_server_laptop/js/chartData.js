@@ -13,11 +13,9 @@ var myInterval;
 var connectionGood = true;
 
 function init () {
-    let currentClass = new Temperature(ctx);
-    let numSensors = 2;
-    let numPreviousTimes = 10;
+    let [numSensors, numPreviousTimes] = [2, 20];
+    let currentClass = new Temperature(ctx, numSensors, numPreviousTimes);
     
-    currentClass.init(numSensors, numPreviousTimes);
     currentClass.setChartAxis(timeInput.value);
 
     startButton.addEventListener("mouseup", () => {startAction(currentClass, startButton);} );

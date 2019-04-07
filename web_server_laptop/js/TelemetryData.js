@@ -12,8 +12,11 @@ class TelemetryData {
         }
     }
 
-    initTelemetryData (context) {
+    init (context, numSensors, numPreviousTimes) {
         this.chart = new Chart(context, initChart);
+        
+        this.setChartDataArray(numPreviousTimes);
+        for (let i = 0; i < numSensors; i++) this.addNewSensorToArray();
     }
 
     setChartDataArray (numPreviousTimes) {
@@ -27,30 +30,26 @@ class TelemetryData {
         let timeArray = new Array(this.lenOfEachArray).map((element, index) => {element = index * this });
     }
     
-    changeArraySize (length) {
-        this.lenOfEachArray = length;
-    }
-    
     addNewSensorToArray () {
         let sensorArray = new Array(this.lenOfEachArray).fill(0);
         this.sensorArrays.push(sensorArray);
     }
 
-    setXMLOnLoad (request, index) {
+    setXMLOnLoad (request) {
         
-        let lenOfEachArray = this.lenOfEachArray;
         const wrapSensorArray = (index) => {return this.getSensorArray(index)};
         const wrapSetSensorArray = (index, data) => {this.setSensorArray(index, data);};
 
         request.onload = () => {
             let sensorIndex = request.index;
+            
             let sensorArray = wrapSensorArray(sensorIndex);
             
             let value;
             if ((value = getNumber(request.responseText)) != null) {
-                this.chart.data.datasets[sensorIndex].data = updateDataArray(sensorArray, value, lenOfEachArray);
+                this.chart.data.datasets[sensorIndex].data = updateDataArray(sensorArray, value, this.lenOfEachArray);
             } else {
-                this.chart.data.datasets[sensorIndex].data = updateDataArray(sensorArray, -1, lenOfEachArray);
+                this.chart.data.datasets[sensorIndex].data = updateDataArray(sensorArray, -1, this.lenOfEachArray);
             }
 
             wrapSetSensorArray(sensorIndex, this.chart.data.datasets[sensorIndex].data);
@@ -59,26 +58,18 @@ class TelemetryData {
         }
     }
 
-    createXMLRequests () {
-        this.XMLRequestsArray = new Array(this.getNumOfSensors()).fill(new XMLHttpRequest());
-        
-        this.XMLRequestsArray.forEach((request,index) => {
-            this.setXMLOnLoad(request, index);
-            
-        });
-    }
-
     sendXMLRequests (link) {
-       
-        this.XMLRequestsArray.forEach((request, index) => {
-            
-            let sensorId = index + 1;
+       for (let i = 0; i < this.getNumOfSensors(); i++) {
+            let sensorId = i + 1;
             let finalLink = link.concat(`${sensorId}`);
-        
-            request.open("GET", finalLink, false);
-            request.index = index;
+
+            let request = new XMLHttpRequest();
+
+            request.open("GET", finalLink);
+            request.index = i;
+            this.setXMLOnLoad(request);
             request.send();            
-        });
+        }
     }
 
     getSensorArray (index) {
@@ -93,14 +84,13 @@ class TelemetryData {
         return this.sensorArrays.length;
     }
 
-    resetChartXAxis (refreshTime) {
-        this.xAxisLabel = new Array(10).fill(0);
-        this.xAxisLabel = this.xAxisLabel.map((element, index) => {
-            return `${index * refreshTime} ms`;
-        });
+    setChartAxis (refreshTime) {
+        resetChartXAxis (refreshTime, this.lenOfEachArray, this.chart);
+    }
 
-        this.chart.data.labels = this.xAxisLabel;
-        this.chart.update();
+    // ---------------------------- abstract methods --------------------------
+    sendRequests (path) {
+        throw new Error("Method 'sendRequests(path)' must be implemented.");
     }
 }
 
@@ -116,12 +106,9 @@ let chart;
 Chart.defaults.global.defaultFontColor = 'white';
 Chart.defaults.global.defaultFontSize = 16;
 
-
 const initChart = {
-    // The type of chart we want to create
     type: 'line',
 
-    // The data for our dataset
     data: {
         labels: xAxisLabel,
         datasets: [
@@ -149,7 +136,6 @@ const initChart = {
         ]
     },
 
-    // Configuration options go here
     options: {
         responsive: false,
         scales: {
@@ -195,5 +181,14 @@ const updateDataArray = (array, newValue, lenOfEachArray) => {
     return [newValue].concat(temp);
 }
 
+const resetChartXAxis = (refreshTime, lenOfEachArray, chart) => {
+    let xAxisLabel = new Array(lenOfEachArray).fill(0);
+    xAxisLabel = xAxisLabel.map((element, index) => {
+        return `${(index * refreshTime)/(1000)} s`;
+    });
+
+    chart.data.labels = xAxisLabel;
+    chart.update();
+}
 
 
