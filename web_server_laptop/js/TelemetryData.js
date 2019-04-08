@@ -88,6 +88,16 @@ class TelemetryData {
         resetChartXAxis (refreshTime, this.lenOfEachArray, this.chart);
     }
 
+    resetChartLabel (xAxisName, yAxisName) {
+        this.chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisName;
+        this.chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisName;
+        this.chart.update();
+    }
+
+    destroyChart () {
+        this.chart.destroy();
+    }
+
     // ---------------------------- abstract methods --------------------------
     sendRequests (path) {
         throw new Error("Method 'sendRequests(path)' must be implemented.");
@@ -139,7 +149,6 @@ const initChart = {
     options: {
         responsive: false,
         scales: {
-            
             yAxes: [{
                 ticks: {
                     callback: function(value, index, values) {
@@ -190,5 +199,6 @@ const resetChartXAxis = (refreshTime, lenOfEachArray, chart) => {
     chart.data.labels = xAxisLabel;
     chart.update();
 }
+
 
 

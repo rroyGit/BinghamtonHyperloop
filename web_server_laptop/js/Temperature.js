@@ -11,6 +11,10 @@ class Temperature extends TelemetryData {
         this.sendXMLRequests(`http://${path}:3002/temp/`);
     }
 
+    changeAxisLabels () {
+        this.resetChartLabel('Time', 'Temperature');
+    }
+
 }
 
 module.exports = Temperature;
