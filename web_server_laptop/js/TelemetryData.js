@@ -13,10 +13,14 @@ class TelemetryData {
     }
 
     init (context, numSensors, numPreviousTimes) {
+        this.borderColors = ['rgb(50, 99, 132)', 'rgb(150, 169, 132)', 'rgb(70, 170, 132)','rgb(250, 99, 132)'];
         this.chart = new Chart(context, initChart);
-        
+        this.numSensors = numSensors;
+
+        setSensorLines(this.numSensors, this.chart, this.borderColors);
         this.setChartDataArray(numPreviousTimes);
-        for (let i = 0; i < numSensors; i++) this.addNewSensorToArray();
+       
+        for (let i = 0; i < this.numSensors; i++) addNewSensorToArray(this.sensorArrays, this.lenOfEachArray);
     }
 
     setChartDataArray (numPreviousTimes) {
@@ -28,11 +32,6 @@ class TelemetryData {
         });
 
         let timeArray = new Array(this.lenOfEachArray).map((element, index) => {element = index * this });
-    }
-    
-    addNewSensorToArray () {
-        let sensorArray = new Array(this.lenOfEachArray).fill(0);
-        this.sensorArrays.push(sensorArray);
     }
 
     setXMLOnLoad (request) {
@@ -81,14 +80,17 @@ class TelemetryData {
     }
     
     getNumOfSensors () {
-        return this.sensorArrays.length;
+        return this.numSensors;
     }
 
-    setChartAxis (refreshTime) {
-        resetChartXAxis (refreshTime, this.lenOfEachArray, this.chart);
+    resetChartAxis (refreshTime) {
+        resetChartXAxis (refreshTime, this.lenOfEachArray, this.tickXLabel, this.chart);
+        resetChartYAxis (this.tickYLabel, this.chart);
     }
 
-    resetChartLabel (xAxisName, yAxisName) {
+    resetChartLabel (xAxisName, yAxisName, xAxisTick, yAxisTick) {
+        [this.tickXLabel, this.tickYLabel] = [xAxisTick, yAxisTick];
+    
         this.chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisName;
         this.chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisName;
         this.chart.update();
@@ -102,16 +104,24 @@ class TelemetryData {
     sendRequests (path) {
         throw new Error("Method 'sendRequests(path)' must be implemented.");
     }
+
+    changeAxisLabels () {
+        throw new Error("Method 'changeAxisLabels()' must be implemented.");
+    }
 }
 
 module.exports = TelemetryData;
 
+let tickYLabel;
+let tickXLabel;
+let numSensors;
 let xAxisLabel;
 let refreshTime;
 let lenOfEachArray;
 let XMLRequestsArray;
 let sensorArrays;
 let chart;
+let borderColors;
 
 Chart.defaults.global.defaultFontColor = 'white';
 Chart.defaults.global.defaultFontSize = 16;
@@ -121,29 +131,7 @@ const initChart = {
 
     data: {
         labels: xAxisLabel,
-        datasets: [
-            {
-                label: 'Sensor 1',
-                
-                borderColor: 'rgb(50, 99, 132)',
-                data: []
-            }, {
-                label: 'Sensor 2',
-                
-                borderColor: 'rgb(150, 169, 132)',
-                data: []
-            }, {
-                label: 'Sensor 3',
-                
-                borderColor: 'rgb(70, 170, 132)',
-                data: []
-            }, {
-                label: 'Sensor 4',
-                
-                borderColor: 'rgb(250, 99, 132)',
-                data: []
-            }
-        ]
+        datasets: []
     },
 
     options: {
@@ -151,9 +139,6 @@ const initChart = {
         scales: {
             yAxes: [{
                 ticks: {
-                    callback: function(value, index, values) {
-                        return value + ' °f';
-                    },
                     suggestedMax: 150
                 },
                 scaleLabel: {
@@ -190,15 +175,42 @@ const updateDataArray = (array, newValue, lenOfEachArray) => {
     return [newValue].concat(temp);
 }
 
-const resetChartXAxis = (refreshTime, lenOfEachArray, chart) => {
+const resetChartXAxis = (refreshTime, lenOfEachArray, tickXLabel, chart) => {
     let xAxisLabel = new Array(lenOfEachArray).fill(0);
     xAxisLabel = xAxisLabel.map((element, index) => {
-        return `${(index * refreshTime)/(1000)} s`;
+        return `${(index * refreshTime)/(1000)} ${tickXLabel}`;
     });
 
     chart.data.labels = xAxisLabel;
     chart.update();
 }
 
+const resetChartYAxis = (yAxisTick, chart) => {
+    chart.options.scales.yAxes[0].ticks.callback = function(value, index, values) {
+        return value + ` ${yAxisTick}`;
+    }
+    chart.update();
+}
+
+const addNewSensorToArray = (sensorArrays, lenOfEachArray) => {
+    let sensorArray = new Array(lenOfEachArray).fill(0);
+    sensorArrays.push(sensorArray);
+}
+
+const setSensorLines = (numSensors, chart, borderColors) => {
+    chart.data.datasets = [];
+    for (let i = 0; i < numSensors; i++) {
+        let lineColor = borderColors[i];
+        let lineName = `Sensor ${i+1}`;
+
+        let set = {
+            label: lineName,
+            borderColor: lineColor,
+            data: []
+        }
+        chart.data.datasets[i] = set; 
+    }
+    chart.update();
+}
 
 

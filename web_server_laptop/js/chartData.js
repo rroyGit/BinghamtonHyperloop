@@ -1,4 +1,6 @@
 const Temperature = require('./Temperature');
+const Distance = require('./Distance');
+const Speed = require('./Speed');
 
 var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -110,7 +112,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Distance":
-            sensorClass = new Temperature(ctx, 2, 10);
+            sensorClass = new Distance(ctx, 4, 20);
             tempButton.style.border = null;
             distButton.style.borderColor = "#ffffff";
             speedButton.style.border = null;
@@ -120,7 +122,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Speed":
-            sensorClass = null;
+            sensorClass = new Speed(ctx, 3, 30);
             tempButton.style.border = null;
             distButton.style.border = null;
             speedButton.style.borderColor = "#ffffff";

@@ -1,6 +1,6 @@
 const TelemetryData = require('./TelemetryData');
 
-class Temperature extends TelemetryData {
+class Speed extends TelemetryData {
     
     constructor(context, numSensors, numPreviousTimes) {
         super();
@@ -12,7 +12,7 @@ class Temperature extends TelemetryData {
     }
 
     changeAxisLabels () {
-        this.resetChartLabel('Time', 'Temperature', 's', '°f');
+        this.resetChartLabel('Time', 'Speed', 's', 'mph');
     }
 
     setChartAxis (refreshTime) {
@@ -21,6 +21,6 @@ class Temperature extends TelemetryData {
 
 }
 
-module.exports = Temperature;
+module.exports = Speed;
 
 

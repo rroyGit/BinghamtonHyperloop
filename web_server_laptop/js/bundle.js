@@ -1,4 +1,60 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const TelemetryData = require('./TelemetryData');
+
+class Distance extends TelemetryData {
+    
+    constructor(context, numSensors, numPreviousTimes) {
+        super();
+        this.init(context,numSensors, numPreviousTimes);
+    }
+
+    sendRequests (path) {
+        this.sendXMLRequests(`http://${path}:3002/dist/`);
+    }
+
+    changeAxisLabels () {
+        this.resetChartLabel('Time', 'Distance', 's', 'ft');
+    }
+
+    setChartAxis (refreshTime) {
+        this.resetChartAxis(refreshTime);
+    }
+
+}
+
+module.exports = Distance;
+
+
+
+},{"./TelemetryData":3}],2:[function(require,module,exports){
+const TelemetryData = require('./TelemetryData');
+
+class Speed extends TelemetryData {
+    
+    constructor(context, numSensors, numPreviousTimes) {
+        super();
+        this.init(context,numSensors, numPreviousTimes);
+    }
+
+    sendRequests (path) {
+        this.sendXMLRequests(`http://${path}:3002/temp/`);
+    }
+
+    changeAxisLabels () {
+        this.resetChartLabel('Time', 'Speed', 's', 'mph');
+    }
+
+    setChartAxis (refreshTime) {
+        this.resetChartAxis(refreshTime);
+    }
+
+}
+
+module.exports = Speed;
+
+
+
+},{"./TelemetryData":3}],3:[function(require,module,exports){
 /*
     Abstract class for the many types of telemetry data enclosing similar functionality
     through their own implementations
@@ -14,10 +70,14 @@ class TelemetryData {
     }
 
     init (context, numSensors, numPreviousTimes) {
+        this.borderColors = ['rgb(50, 99, 132)', 'rgb(150, 169, 132)', 'rgb(70, 170, 132)','rgb(250, 99, 132)'];
         this.chart = new Chart(context, initChart);
-        
+        this.numSensors = numSensors;
+
+        setSensorLines(this.numSensors, this.chart, this.borderColors);
         this.setChartDataArray(numPreviousTimes);
-        for (let i = 0; i < numSensors; i++) this.addNewSensorToArray();
+       
+        for (let i = 0; i < this.numSensors; i++) addNewSensorToArray(this.sensorArrays, this.lenOfEachArray);
     }
 
     setChartDataArray (numPreviousTimes) {
@@ -29,11 +89,6 @@ class TelemetryData {
         });
 
         let timeArray = new Array(this.lenOfEachArray).map((element, index) => {element = index * this });
-    }
-    
-    addNewSensorToArray () {
-        let sensorArray = new Array(this.lenOfEachArray).fill(0);
-        this.sensorArrays.push(sensorArray);
     }
 
     setXMLOnLoad (request) {
@@ -82,14 +137,17 @@ class TelemetryData {
     }
     
     getNumOfSensors () {
-        return this.sensorArrays.length;
+        return this.numSensors;
     }
 
-    setChartAxis (refreshTime) {
-        resetChartXAxis (refreshTime, this.lenOfEachArray, this.chart);
+    resetChartAxis (refreshTime) {
+        resetChartXAxis (refreshTime, this.lenOfEachArray, this.tickXLabel, this.chart);
+        resetChartYAxis (this.tickYLabel, this.chart);
     }
 
-    resetChartLabel (xAxisName, yAxisName) {
+    resetChartLabel (xAxisName, yAxisName, xAxisTick, yAxisTick) {
+        [this.tickXLabel, this.tickYLabel] = [xAxisTick, yAxisTick];
+    
         this.chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisName;
         this.chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisName;
         this.chart.update();
@@ -103,16 +161,24 @@ class TelemetryData {
     sendRequests (path) {
         throw new Error("Method 'sendRequests(path)' must be implemented.");
     }
+
+    changeAxisLabels () {
+        throw new Error("Method 'changeAxisLabels()' must be implemented.");
+    }
 }
 
 module.exports = TelemetryData;
 
+let tickYLabel;
+let tickXLabel;
+let numSensors;
 let xAxisLabel;
 let refreshTime;
 let lenOfEachArray;
 let XMLRequestsArray;
 let sensorArrays;
 let chart;
+let borderColors;
 
 Chart.defaults.global.defaultFontColor = 'white';
 Chart.defaults.global.defaultFontSize = 16;
@@ -122,29 +188,7 @@ const initChart = {
 
     data: {
         labels: xAxisLabel,
-        datasets: [
-            {
-                label: 'Sensor 1',
-                
-                borderColor: 'rgb(50, 99, 132)',
-                data: []
-            }, {
-                label: 'Sensor 2',
-                
-                borderColor: 'rgb(150, 169, 132)',
-                data: []
-            }, {
-                label: 'Sensor 3',
-                
-                borderColor: 'rgb(70, 170, 132)',
-                data: []
-            }, {
-                label: 'Sensor 4',
-                
-                borderColor: 'rgb(250, 99, 132)',
-                data: []
-            }
-        ]
+        datasets: []
     },
 
     options: {
@@ -152,9 +196,6 @@ const initChart = {
         scales: {
             yAxes: [{
                 ticks: {
-                    callback: function(value, index, values) {
-                        return value + ' °f';
-                    },
                     suggestedMax: 150
                 },
                 scaleLabel: {
@@ -191,20 +232,47 @@ const updateDataArray = (array, newValue, lenOfEachArray) => {
     return [newValue].concat(temp);
 }
 
-const resetChartXAxis = (refreshTime, lenOfEachArray, chart) => {
+const resetChartXAxis = (refreshTime, lenOfEachArray, tickXLabel, chart) => {
     let xAxisLabel = new Array(lenOfEachArray).fill(0);
     xAxisLabel = xAxisLabel.map((element, index) => {
-        return `${(index * refreshTime)/(1000)} s`;
+        return `${(index * refreshTime)/(1000)} ${tickXLabel}`;
     });
 
     chart.data.labels = xAxisLabel;
     chart.update();
 }
 
+const resetChartYAxis = (yAxisTick, chart) => {
+    chart.options.scales.yAxes[0].ticks.callback = function(value, index, values) {
+        return value + ` ${yAxisTick}`;
+    }
+    chart.update();
+}
+
+const addNewSensorToArray = (sensorArrays, lenOfEachArray) => {
+    let sensorArray = new Array(lenOfEachArray).fill(0);
+    sensorArrays.push(sensorArray);
+}
+
+const setSensorLines = (numSensors, chart, borderColors) => {
+    chart.data.datasets = [];
+    for (let i = 0; i < numSensors; i++) {
+        let lineColor = borderColors[i];
+        let lineName = `Sensor ${i+1}`;
+
+        let set = {
+            label: lineName,
+            borderColor: lineColor,
+            data: []
+        }
+        chart.data.datasets[i] = set; 
+    }
+    chart.update();
+}
 
 
 
-},{}],2:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 const TelemetryData = require('./TelemetryData');
 
 class Temperature extends TelemetryData {
@@ -219,7 +287,11 @@ class Temperature extends TelemetryData {
     }
 
     changeAxisLabels () {
-        this.resetChartLabel('Time', 'Temperature');
+        this.resetChartLabel('Time', 'Temperature', 's', '°f');
+    }
+
+    setChartAxis (refreshTime) {
+        this.resetChartAxis(refreshTime);
     }
 
 }
@@ -228,8 +300,10 @@ module.exports = Temperature;
 
 
 
-},{"./TelemetryData":1}],3:[function(require,module,exports){
+},{"./TelemetryData":3}],5:[function(require,module,exports){
 const Temperature = require('./Temperature');
+const Distance = require('./Distance');
+const Speed = require('./Speed');
 
 var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -341,7 +415,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Distance":
-            sensorClass = new Temperature(ctx, 2, 10);
+            sensorClass = new Distance(ctx, 4, 20);
             tempButton.style.border = null;
             distButton.style.borderColor = "#ffffff";
             speedButton.style.border = null;
@@ -351,7 +425,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Speed":
-            sensorClass = null;
+            sensorClass = new Speed(ctx, 3, 30);
             tempButton.style.border = null;
             distButton.style.border = null;
             speedButton.style.borderColor = "#ffffff";
@@ -371,4 +445,4 @@ stopButton.style.borderColor = "#ffffff";
 tempButton.style.borderColor = "#ffffff";
 
 init();
-},{"./Temperature":2}]},{},[3]);
+},{"./Distance":1,"./Speed":2,"./Temperature":4}]},{},[5]);
