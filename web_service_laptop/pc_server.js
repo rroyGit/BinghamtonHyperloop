@@ -51,6 +51,16 @@ function setupRoutes(app) {
     // (e.g. /temp?sensorId=1&value=67)
     app.get(`${TEMP}?`, doWriteTemp(app));
 
+
+
+
+
+
+
+
+
+
+    
     // close database
     app.get(`${DATABASE_CLOSE}`, closeDatabase(app));
 

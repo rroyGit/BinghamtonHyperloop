@@ -4,8 +4,8 @@
 const assert = require('assert');
 const process = require('process');
 
-const visualWS = require('./js/visual_ws');
-const teleData = require('./pc_server');
+const WebServiceController = require('./js/WebServiceController');
+const WebServer = require('./js/WebServer');
 
 function usage() {
   console.error(`usage: ${process.argv[1]} PORT WS_BASE_URL`);
@@ -22,10 +22,11 @@ const BASE = '/home';
 
 async function go(args) {
   try {
+    process.chdir(__dirname);
     const port = getPort(args[0]);
     const wsBaseUrl = args[1];
-    const webServer = new visualWS(wsBaseUrl);
-    teleData(port, BASE, webServer);
+    const webServiceController = new WebServiceController(wsBaseUrl);
+    WebServer(port, BASE, webServiceController, __dirname);
   }
   catch (err) {
     console.error(err);

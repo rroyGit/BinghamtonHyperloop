@@ -9,8 +9,8 @@ const { URL } = require('url');
 
 const bodyParser = require('body-parser');
 
-const STATIC_DIR = 'statics';
-const TEMPLATES_DIR = 'templates';
+const STATIC_DIR = '../statics';
+const TEMPLATES_DIR = '../templates';
 
 const OK = 200;
 const CREATED = 201;
@@ -19,16 +19,15 @@ const NOT_FOUND = 404;
 const CONFLICT = 409;
 const SERVER_ERROR = 500;
 
-function serve(port, base, model) {
+function server(port, base, model, dir) {
   const app = express();
   app.locals.port = port;
   app.locals.base = base;
   app.locals.model = model;
+  app.locals.dir = dir;
 
-
-  process.chdir(__dirname);
   // base = '/home'
-  app.use(base, express.static(__dirname));
+  app.use(base, express.static(dir));
   
   
   app.use(bodyParser.urlencoded({
@@ -39,11 +38,11 @@ function serve(port, base, model) {
   setupTemplates(app, TEMPLATES_DIR);
   setupRoutes(app);
   app.listen(port, function() {
-    console.log(`Visual Web Server listening on port ${port}`);
+    console.log(`GNC Web Server listening on port ${port}`);
   });
 }
 
-module.exports = serve;
+module.exports = server;
 
 /******************************** Routes *******************************/
 const INDEX_PAGE = '/';
@@ -81,7 +80,7 @@ function redirectHome(app) {
 function toHomePage(app) {
   return errorWrap(async function(req, res) {
     try {
-      res.sendFile(path.join(__dirname+'/statics/index.html'));
+      res.sendFile(path.join(app.locals.dir, '/statics/index.html'));
     }
     catch (err) {
       console.error(err);
@@ -92,7 +91,7 @@ function toHomePage(app) {
 function toModelPage(app) {
   return errorWrap(async function(req, res) {
     try {
-      res.sendFile(path.join(__dirname+'/statics/model.html'));
+      res.sendFile(path.join(app.locals.dir, '/statics/model.html'));
     }
     catch (err) {
       console.error(err);

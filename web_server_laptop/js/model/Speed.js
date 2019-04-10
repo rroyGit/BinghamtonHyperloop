@@ -8,7 +8,7 @@ class Speed extends TelemetryData {
     }
 
     sendRequests (path) {
-        this.sendXMLRequests(`http://${path}:3002/temp/`);
+        this.sendXMLRequests(`http://${path}:3002/speed/`);
     }
 
     changeAxisLabels () {

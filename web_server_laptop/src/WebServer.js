@@ -19,11 +19,11 @@ const NOT_FOUND = 404;
 const CONFLICT = 409;
 const SERVER_ERROR = 500;
 
-function serve(port, base, model) {
+function serve(port, base, webServiceController) {
   const app = express();
   app.locals.port = port;
   app.locals.base = base;
-  app.locals.model = model;
+  app.locals.webServiceController = webServiceController;
 
 
   process.chdir(__dirname);
@@ -39,7 +39,7 @@ function serve(port, base, model) {
   setupTemplates(app, TEMPLATES_DIR);
   setupRoutes(app);
   app.listen(port, function() {
-    console.log(`Visual Web Server listening on port ${port}`);
+    console.log(`GNC Web Server listening on port ${port}`);
   });
 }
 
@@ -106,7 +106,7 @@ function getTemp(app) {
     try {
 
       const sensorId = req.params.sensorId;
-      const sensorValue = await app.locals.model.getTemp(sensorId);
+      const sensorValue = await app.locals.webServiceController.getTemp(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);

@@ -3,16 +3,16 @@
 const axios = require('axios');
 
 
-function VisualWS(baseUrl) {
+function WebServiceController(baseUrl) {
   this.webServiceUrl = `${baseUrl}/temp`;
 
 }
 
-module.exports = VisualWS;
+module.exports = WebServiceController;
 
 //wrappers to call remote web services
 
-VisualWS.prototype.getTemp = async function (sensorId) {
+WebServiceController.prototype.getTemp = async function (sensorId) {
   try {
     const url = this.webServiceUrl + "/" + `${sensorId}`;
     const response = await axios.get(url);
