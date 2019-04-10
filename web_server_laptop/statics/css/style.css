@@ -134,9 +134,10 @@ button:focus {outline:0;}
 }
 
 .unit {
-    padding-right: 10%;
+    padding-right: 5%;
+    margin-top: -10%;
     float: right;
-    font-size: 60%;
+    font-size: 80%;
     color: #db1837;
 
     font-family: sans-serif;
@@ -144,13 +145,12 @@ button:focus {outline:0;}
 }
 
 .sensor {
-    text-align: left;
-    margin-left: 45%;
-   
+    text-align: center;
+    
     font-weight: bold;
     font-size: 3vw;
     color:#479b0f;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Roboto', sans-serif;
     line-height: 170%;
 }
 
@@ -263,7 +263,7 @@ button:focus {outline:0;}
 .title {
     background:  linear-gradient(45deg, rgba(212,255,196,1) 0%, rgba(0,128,128,1) 100%);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Roboto', sans-serif;
     font-size: 80%;
 }
 .sensors > div {

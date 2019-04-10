@@ -118,7 +118,7 @@ let numSensors;
 let xAxisLabel;
 let refreshTime;
 let lenOfEachArray;
-let XMLRequestsArray;
+
 let sensorArrays;
 let chart;
 let borderColors;

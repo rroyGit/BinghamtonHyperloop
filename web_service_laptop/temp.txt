@@ -40,3 +40,5 @@ sensorId: 1 value: 500
 sensorId: 1 value: 20
 sensorId: 1 value: 200
 sensorId: 2 value: 100
+sensorId: 2 value: 140
+sensorId: 1 value: 140
