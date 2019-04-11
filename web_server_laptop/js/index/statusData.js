@@ -72,8 +72,9 @@ const stopAction = (context) => {
 }
 
 function sendRequests () {
-    classes.forEach(element => {
-            element.apply(PATH);
+    classes.forEach(sensorClass => {
+        sensorClass.init();
+        sensorClass.apply(PATH);
     });
 }
 

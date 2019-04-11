@@ -12,7 +12,7 @@ class TelemetryData {
         }
     }
 
-    init (document, numSensors) {
+    initData (document, numSensors) {
         this.document = document;
         this.numSensors = numSensors;
     }

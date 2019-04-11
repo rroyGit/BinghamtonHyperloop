@@ -5,8 +5,12 @@ class Distance extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -16,7 +20,7 @@ class Distance extends TelemetryData {
 
 module.exports = Distance;
 
-
+let document, numSensors, prefix;
 },{"./TelemetryData":3}],2:[function(require,module,exports){
 const TelemetryData = require('./TelemetryData');
 
@@ -24,8 +28,12 @@ class Speed extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -34,6 +42,8 @@ class Speed extends TelemetryData {
 }
 
 module.exports = Speed;
+
+let document, numSensors, prefix;
 },{"./TelemetryData":3}],3:[function(require,module,exports){
 /*
     Abstract class for the many types of telemetry data enclosing similar functionality
@@ -49,7 +59,7 @@ class TelemetryData {
         }
     }
 
-    init (document, numSensors) {
+    initData (document, numSensors) {
         this.document = document;
         this.numSensors = numSensors;
     }
@@ -137,8 +147,12 @@ class Temperature extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -147,6 +161,8 @@ class Temperature extends TelemetryData {
 }
 
 module.exports = Temperature;
+
+let document, numSensors, prefix;
 },{"./TelemetryData":3}],5:[function(require,module,exports){
 const Temperature = require('./Temperature');
 const Distance = require('./Distance');
@@ -222,8 +238,9 @@ const stopAction = (context) => {
 }
 
 function sendRequests () {
-    classes.forEach(element => {
-            element.apply(PATH);
+    classes.forEach(sensorClass => {
+        sensorClass.init();
+        sensorClass.apply(PATH);
     });
 }
 

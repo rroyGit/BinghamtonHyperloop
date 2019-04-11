@@ -4,8 +4,12 @@ class Speed extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -14,3 +18,5 @@ class Speed extends TelemetryData {
 }
 
 module.exports = Speed;
+
+let document, numSensors, prefix;

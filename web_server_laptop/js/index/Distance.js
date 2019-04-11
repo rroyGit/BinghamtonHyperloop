@@ -4,8 +4,12 @@ class Distance extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -15,3 +19,4 @@ class Distance extends TelemetryData {
 
 module.exports = Distance;
 
+let document, numSensors, prefix;

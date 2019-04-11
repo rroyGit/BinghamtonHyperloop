@@ -4,8 +4,12 @@ class Temperature extends TelemetryData {
     
     constructor(document, prefix, numSensors) {
         super();
-        this.init(document, numSensors);
-        this.buildSensorElements(prefix);
+        [this.document, this.numSensors, this.prefix] = [document, numSensors, prefix];
+    }
+
+    init () {
+        this.initData(this.document, this.numSensors);
+        this.buildSensorElements(this.prefix);
     }
 
     apply (path) {
@@ -14,3 +18,5 @@ class Temperature extends TelemetryData {
 }
 
 module.exports = Temperature;
+
+let document, numSensors, prefix;
