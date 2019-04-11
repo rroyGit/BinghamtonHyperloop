@@ -40,12 +40,17 @@ class GNCDatabase {
     this.databaseConnection = await this.mongoDBConnection.db(this.databaseName);
 
     // create collection for storing various telemetry data such as temperature readings
-    this.telemetryTempCollection = await this.createCollection("Temperature");
-
+    this.tempCollection = await this.createCollection("Temperature");
+    this.distCollection = await this.createCollection("Distance");
+    this.speedCollection = await this.createCollection("Speed");
 
     // init value to -1
     await this.writeTemp('1','-1');
     await this.writeTemp('2','-1');
+    await this.writeDist('1','-1');
+    await this.writeDist('2','-1');
+    await this.writeSpeed('1','-1');
+    await this.writeSpeed('2','-1');
   }
 
   /** Release all resources held by this doc-finder.  Specifically,
@@ -73,12 +78,10 @@ class GNCDatabase {
   async createCollection(collectionName) {
     return await this.databaseConnection.createCollection(collectionName);
   }
-
-  // ------------------------------------------------------------------------------------
-
+  //-----------------------------------------------TEMP----------------------
   async writeTemp(sensorId, sensorValue) {
     try {
-        await this.telemetryTempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+        await this.tempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
     } catch (err){
         console.log(err);
         throw `One or more errors in writing Database: ${this.databaseName} Collection: temperature`;
@@ -87,7 +90,7 @@ class GNCDatabase {
 
   async readLastTemp(sensorId) {
     try {
-        const document = await this.telemetryTempCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
+        const document = await this.tempCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
         if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorId}`;
 
         const sensorValue = document.sensorValue;
@@ -97,7 +100,50 @@ class GNCDatabase {
         throw `One or more errors in reading Database: ${this.databaseName} Collection: temperature`;
     }
   }
+  //-----------------------------------------------DIST----------------------
+  async writeDist(sensorId, sensorValue) {
+    try {
+        await this.distCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in writing Database: ${this.databaseName} Collection: distance`;
+    }
+  }
 
+  async readLastDist(sensorId) {
+    try {
+        const document = await this.distCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
+        if (document == null) throw `No document satisfies the query - readLastDist() sensorID ${sensorId}`;
+
+        const sensorValue = document.sensorValue;
+        return sensorValue;
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in reading Database: ${this.databaseName} Collection: distance`;
+    }
+  }
+  //-----------------------------------------------SPEED---------------------
+  async writeSpeed(sensorId, sensorValue) {
+    try {
+        await this.speedCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in writing Database: ${this.databaseName} Collection: speed`;
+    }
+  }
+
+  async readLastSpeed(sensorId) {
+    try {
+        const document = await this.speedCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
+        if (document == null) throw `No document satisfies the query - readLastSpeed() sensorID ${sensorId}`;
+
+        const sensorValue = document.sensorValue;
+        return sensorValue;
+    } catch (err){
+        console.log(err);
+        throw `One or more errors in reading Database: ${this.databaseName} Collection: speed`;
+    }
+  }
 }
 
 module.exports = GNCDatabase;
@@ -111,7 +157,7 @@ let serverUrl;
 let mongoDBConnection;
 let databaseConnection;
 
-let telemetryDataCollection;
+let tempCollection, distCollection, speedCollection;
 
 //Used to prevent warning messages from mongodb.
 const MONGO_OPTIONS = {

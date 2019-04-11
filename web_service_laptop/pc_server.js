@@ -18,6 +18,9 @@ const SERVER_ERROR = 500;
 
 //Main URLs
 const TEMP = '/temp';
+const DIST = '/dist';
+const SPEED = '/speed';
+
 const DATABASE_CLOSE = '/closeDB';
 const DATABASE_CLEAR = '/clearDB';
 
@@ -40,37 +43,45 @@ module.exports = { init };
 
 function setupRoutes(app) {
     app.use(cors());              //for security workaround in future projects
-    app.use(bodyParser.json());  //all incoming bodies are JSON
+    app.use(bodyParser.json());   //all incoming bodies are JSON
     
-    
-    // get last temp reading with approp. sensorId
+    //-----------------------------------------------TEMP----------------------
+    // get last temperature reading from database with a sensorId
     // (e.g. /temp/1)
-    app.get(`${TEMP}/:sensorId`, doReadTemp(app));
+    app.get(`${TEMP}/:sensorId`, getTemp(app));
 
-    // write temp readings with its sensorId
+    // set temperature reading to database with a sensorId
     // (e.g. /temp?sensorId=1&value=67)
-    app.get(`${TEMP}?`, doWriteTemp(app));
+    app.get(`${TEMP}?`, setTemp(app));
+    //-----------------------------------------------DIST----------------------
+    // get last distance reading from database with a sensorId
+    // (e.g. /dist/1)
+    app.get(`${DIST}/:sensorId`, getDist(app));
 
+    // set distance reading to database with its sensorId
+    // (e.g. /dist?sensorId=1&value=67)
+    app.get(`${DIST}?`, setDist(app));
+    //-----------------------------------------------SPEED---------------------
+    // get last speed reading from database with a sensorId
+    // (e.g. /speed/1)
+    app.get(`${SPEED}/:sensorId`, getSpeed(app));
 
-
-
-
-
-
-
-
-
+    // set temp reading to database with its sensorId
+    // (e.g. /speed?sensorId=1&value=67)
+    app.get(`${SPEED}?`, setSpeed(app));
     
+
+
     // close database
     app.get(`${DATABASE_CLOSE}`, closeDatabase(app));
-
     // clear database
     app.get(`${DATABASE_CLEAR}`, clearDatabase(app));
 
     app.use(doErrors()); //must be last; setup for server errors   
 }
 
-function doReadTemp (app) {
+//-----------------------------------------------TEMP----------------------
+function getTemp (app) {
   return errorWrap(async function(req, res) {
     try {
       const sensorId = req.params.sensorId; 
@@ -89,7 +100,7 @@ function doReadTemp (app) {
   });
 }
 
-function doWriteTemp (app) {
+function setTemp (app) {
   return errorWrap(async function(req, res) {
     try {
       if (req.query.sensorId === null || req.query.sensorId.length === 0
@@ -97,17 +108,105 @@ function doWriteTemp (app) {
         throw {
           isDomain: true,
           errorCode: `BAD_REQUEST`,
-          message: `Incorrect url, try like so temp?sensorId=1&value=26`,
+          message: `Incorrect url, try like > temp?sensorId=1&value=26`,
         };
       }
 
       const [sensorId, value] = [req.query.sensorId, req.query.value];
 
-      await app.locals.processor.writeFile(sensorId, value);
+      //await app.locals.processor.writeFile(sensorId, value);
       await app.locals.pcDatabase.writeTemp(sensorId,value);
 
       res.send("GOOD");
       
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
+//-----------------------------------------------DIST----------------------
+function getDist (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      const sensorId = req.params.sensorId; 
+      
+      //const fileName = `temp${sensorId}.txt`;
+      //const value = await app.locals.processor.readFile(fileName);
+
+      const value = await app.locals.pcDatabase.readLastDist(sensorId);
+
+      res.send(value);
+     
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
+
+function setDist (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      if (req.query.sensorId === null || req.query.sensorId.length === 0
+        || req.query.value === null || req.query.value.length === 0) {
+        throw {
+          isDomain: true,
+          errorCode: `BAD_REQUEST`,
+          message: `Incorrect url, try like > dist?sensorId=1&value=26`,
+        };
+      }
+
+      const [sensorId, value] = [req.query.sensorId, req.query.value];
+
+      //await app.locals.processor.writeFile(sensorId, value);
+      await app.locals.pcDatabase.writeDist(sensorId,value);
+
+      res.send("GOOD");
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
+//-----------------------------------------------SPEED---------------------
+function getSpeed (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      const sensorId = req.params.sensorId; 
+      
+      //const fileName = `temp${sensorId}.txt`;
+      //const value = await app.locals.processor.readFile(fileName);
+
+      const value = await app.locals.pcDatabase.readLastSpeed(sensorId);
+
+      res.send(value);
+     
+    } catch(err) {
+      console.log(err);
+      res.send("BAD");
+    }
+  });
+}
+
+function setSpeed (app) {
+  return errorWrap(async function(req, res) {
+    try {
+      if (req.query.sensorId === null || req.query.sensorId.length === 0
+        || req.query.value === null || req.query.value.length === 0) {
+        throw {
+          isDomain: true,
+          errorCode: `BAD_REQUEST`,
+          message: `Incorrect url, try like > speed?sensorId=1&value=26`,
+        };
+      }
+
+      const [sensorId, value] = [req.query.sensorId, req.query.value];
+
+      //await app.locals.processor.writeFile(sensorId, value);
+      await app.locals.pcDatabase.writeSpeed(sensorId,value);
+
+      res.send("GOOD");
     } catch(err) {
       console.log(err);
       res.send("BAD");
