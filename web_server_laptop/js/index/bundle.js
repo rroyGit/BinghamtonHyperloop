@@ -182,10 +182,11 @@ const PATH = "localhost";
 let classes;
 
 function init () {
-    classes = [new Temperature(document, 'tempSensor', 2)];
+    classes = [new Temperature(document, 'tempSensor', 2), 
+                new Distance(document, 'distSensor', 2), 
+                new Speed(document, 'speedSensor', 2)];
 
-    // new Distance(document, 'distSensor', 4), 
-    // new Speed(document, 'speedSensor', 4)
+    classes.forEach(sensorClass => { sensorClass.init(); });
     
     startButton.addEventListener("mouseup", () => {startAction(startButton);});
     stopButton.addEventListener("mouseup", () => {stopAction(stopButton);});
@@ -238,10 +239,7 @@ const stopAction = (context) => {
 }
 
 function sendRequests () {
-    classes.forEach(sensorClass => {
-        sensorClass.init();
-        sensorClass.apply(PATH);
-    });
+    classes.forEach(sensorClass => { sensorClass.apply(PATH); });
 }
 
 init();
