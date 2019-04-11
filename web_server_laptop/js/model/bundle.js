@@ -5,7 +5,11 @@ class Distance extends TelemetryData {
     
     constructor(context, numSensors, numPreviousTimes) {
         super();
-        this.init(context,numSensors, numPreviousTimes);
+        [this.context, this.numSensors, this.numPreviousTimes] = [context, numSensors, numPreviousTimes];
+    }
+
+    init () {
+        this.initChart(this.context, this.numSensors, this.numPreviousTimes);
     }
 
     sendRequests (path) {
@@ -24,6 +28,7 @@ class Distance extends TelemetryData {
 
 module.exports = Distance;
 
+let context, numSensors, numPreviousTimes;
 
 
 },{"./TelemetryData":3}],2:[function(require,module,exports){
@@ -33,11 +38,15 @@ class Speed extends TelemetryData {
     
     constructor(context, numSensors, numPreviousTimes) {
         super();
-        this.init(context,numSensors, numPreviousTimes);
+        [this.context, this.numSensors, this.numPreviousTimes] = [context, numSensors, numPreviousTimes];
+    }
+
+    init () {
+        this.initChart(this.context, this.numSensors, this.numPreviousTimes);
     }
 
     sendRequests (path) {
-        this.sendXMLRequests(`http://${path}:3002/temp/`);
+        this.sendXMLRequests(`http://${path}:3002/speed/`);
     }
 
     changeAxisLabels () {
@@ -52,6 +61,7 @@ class Speed extends TelemetryData {
 
 module.exports = Speed;
 
+let context, numSensors, numPreviousTimes;
 
 
 },{"./TelemetryData":3}],3:[function(require,module,exports){
@@ -69,7 +79,7 @@ class TelemetryData {
         }
     }
 
-    init (context, numSensors, numPreviousTimes) {
+    initChart (context, numSensors, numPreviousTimes) {
         this.borderColors = ['rgb(50, 99, 132)', 'rgb(150, 169, 132)', 'rgb(70, 170, 132)','rgb(250, 99, 132)'];
         this.chart = new Chart(context, initChart);
         this.numSensors = numSensors;
@@ -175,7 +185,7 @@ let numSensors;
 let xAxisLabel;
 let refreshTime;
 let lenOfEachArray;
-let XMLRequestsArray;
+
 let sensorArrays;
 let chart;
 let borderColors;
@@ -279,7 +289,11 @@ class Temperature extends TelemetryData {
     
     constructor(context, numSensors, numPreviousTimes) {
         super();
-        this.init(context,numSensors, numPreviousTimes);
+        [this.context, this.numSensors, this.numPreviousTimes] = [context, numSensors, numPreviousTimes];
+    }
+
+    init () {
+        this.initChart(this.context, this.numSensors, this.numPreviousTimes);
     }
 
     sendRequests (path) {
@@ -297,6 +311,8 @@ class Temperature extends TelemetryData {
 }
 
 module.exports = Temperature;
+
+let context, numSensors, numPreviousTimes;
 
 
 
@@ -436,6 +452,7 @@ const createClass = () => {
             break;
     }
 
+    sensorClass.init();
     sensorClass.changeAxisLabels();
     sensorClass.setChartAxis(timeInput.value);
 }

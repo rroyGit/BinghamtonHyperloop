@@ -133,6 +133,7 @@ const createClass = () => {
             break;
     }
 
+    sensorClass.init();
     sensorClass.changeAxisLabels();
     sensorClass.setChartAxis(timeInput.value);
 }

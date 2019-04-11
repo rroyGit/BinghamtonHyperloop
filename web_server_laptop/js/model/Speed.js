@@ -4,7 +4,11 @@ class Speed extends TelemetryData {
     
     constructor(context, numSensors, numPreviousTimes) {
         super();
-        this.init(context,numSensors, numPreviousTimes);
+        [this.context, this.numSensors, this.numPreviousTimes] = [context, numSensors, numPreviousTimes];
+    }
+
+    init () {
+        this.initChart(this.context, this.numSensors, this.numPreviousTimes);
     }
 
     sendRequests (path) {
@@ -23,4 +27,5 @@ class Speed extends TelemetryData {
 
 module.exports = Speed;
 
+let context, numSensors, numPreviousTimes;
 

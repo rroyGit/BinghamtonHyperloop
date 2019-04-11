@@ -9,8 +9,8 @@ const { URL } = require('url');
 
 const bodyParser = require('body-parser');
 
-const STATIC_DIR = '../statics';
-const TEMPLATES_DIR = '../templates';
+const STATIC_DIR = 'statics';
+const TEMPLATES_DIR = 'templates';
 
 const OK = 200;
 const CREATED = 201;

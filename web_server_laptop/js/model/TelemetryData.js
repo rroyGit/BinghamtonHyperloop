@@ -12,7 +12,7 @@ class TelemetryData {
         }
     }
 
-    init (context, numSensors, numPreviousTimes) {
+    initChart (context, numSensors, numPreviousTimes) {
         this.borderColors = ['rgb(50, 99, 132)', 'rgb(150, 169, 132)', 'rgb(70, 170, 132)','rgb(250, 99, 132)'];
         this.chart = new Chart(context, initChart);
         this.numSensors = numSensors;
