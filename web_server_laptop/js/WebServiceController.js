@@ -2,19 +2,47 @@
 
 const axios = require('axios');
 
-
 function WebServiceController(baseUrl) {
-  this.webServiceUrl = `${baseUrl}/temp`;
-
+  this.wsTempUrl = `${baseUrl}/temp`;
+  this.wsDistUrl = `${baseUrl}/dist`;
+  this.wsSpeedUrl = `${baseUrl}/speed`;
 }
 
 module.exports = WebServiceController;
 
-//wrappers to call remote web services
+//wrappers to call remote web service
 
 WebServiceController.prototype.getTemp = async function (sensorId) {
   try {
-    const url = this.webServiceUrl + "/" + `${sensorId}`;
+    const url = this.wsTempUrl + "/" + `${sensorId}`;
+    const response = await axios.get(url);
+
+    return response.data;
+
+  }
+  catch (err) {
+    console.error(err);
+    throw (err.response && err.response.data) ? err.response.data : err;
+  }
+};
+
+WebServiceController.prototype.getDist = async function (sensorId) {
+  try {
+    const url = this.wsDistUrl + "/" + `${sensorId}`;
+    const response = await axios.get(url);
+
+    return response.data;
+
+  }
+  catch (err) {
+    console.error(err);
+    throw (err.response && err.response.data) ? err.response.data : err;
+  }
+};
+
+WebServiceController.prototype.getSpeed = async function (sensorId) {
+  try {
+    const url = this.wsSpeedUrl + "/" + `${sensorId}`;
     const response = await axios.get(url);
 
     return response.data;
