@@ -61,6 +61,8 @@ function setupRoutes(app) {
   
   // web service routes
   app.get(`/temp/:sensorId`, getTemp(app));
+  app.get(`/dist/:sensorId`, getDist(app));
+  app.get(`/speed/:sensorId`, getSpeed(app));
 
   app.use(doErrors()); //must be last - setup for server errors
 }
@@ -100,12 +102,49 @@ function toModelPage(app) {
 }
 
 function getTemp(app) {
-  
   return errorWrap(async function(req, res) {
     try {
 
       const sensorId = req.params.sensorId;
       const sensorValue = await app.locals.model.getTemp(sensorId);
+      
+      //const model = { base: app.locals.base, name: name, content: contentData };
+      //const html = doMustache(app, 'docUploaded', model);
+      
+      res.send(`${sensorValue}`);
+    }
+    catch (err) {
+      console.error(err);
+      console.log("ERROR in pc_server");
+    }
+  });
+}
+
+function getDist(app) {
+  return errorWrap(async function(req, res) {
+    try {
+
+      const sensorId = req.params.sensorId;
+      const sensorValue = await app.locals.model.getDist(sensorId);
+      
+      //const model = { base: app.locals.base, name: name, content: contentData };
+      //const html = doMustache(app, 'docUploaded', model);
+      
+      res.send(`${sensorValue}`);
+    }
+    catch (err) {
+      console.error(err);
+      console.log("ERROR in pc_server");
+    }
+  });
+}
+
+function getSpeed(app) {
+  return errorWrap(async function(req, res) {
+    try {
+
+      const sensorId = req.params.sensorId;
+      const sensorValue = await app.locals.model.getSpeed(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
