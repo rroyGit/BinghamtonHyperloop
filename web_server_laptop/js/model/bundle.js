@@ -414,7 +414,7 @@ const stopAction = (context) => {
 }
 
 const createClass = () => {
-    let [numSensors, numPreviousTimes] = [2, 10];
+    let [numSensors, numPreviousTimes] = [4, 10];
 
     if (sensorClass) sensorClass.destroyChart();
 

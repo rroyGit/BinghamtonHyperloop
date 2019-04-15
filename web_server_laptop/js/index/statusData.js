@@ -16,7 +16,7 @@ const PATH = "localhost";
 let classes;
 
 function init () {
-    classes = [new Temperature(document, 'tempSensor', 2), 
+    classes = [new Temperature(document, 'tempSensor', 4), 
                 new Distance(document, 'distSensor', 2), 
                 new Speed(document, 'speedSensor', 2)];
 

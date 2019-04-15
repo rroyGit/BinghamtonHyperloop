@@ -21,8 +21,10 @@
   - Browserify
   - *npm install axios express multer mustache chart.js browserify*
 
-##### Browserify
-  - Create bundle: *npx browserify chartData.js > bundle.js*
+##### Browserify (web server)
+  - Create bundle by going into respective web page directory
+      - *npx browserify chartData.js > bundle.js*
+      - *npx browserify statusData.js > bundle.js*
   - Add script tag including *bundle.js* in your HTML
 
 ##### Install MongoDB (Linux package)
