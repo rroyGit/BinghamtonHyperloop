@@ -7,6 +7,7 @@ var stopButton = document.getElementById("stopButton");
 var timeInput = document.getElementById("timeInput");
 
 
+
 var state = "STOP";
 var myInterval;
 var connectionGood = true;
@@ -16,9 +17,9 @@ const PATH = "localhost";
 let classes;
 
 function init () {
-    classes = [new Temperature(document, 'tempSensor', 4), 
-                new Distance(document, 'distSensor', 2), 
-                new Speed(document, 'speedSensor', 2)];
+    classes = [new Temperature(document, 'tempSensor', 2)];
+                //new Distance(document, 'distSensor', 2), 
+                //new Speed(document, 'speedSensor', 2)];
 
     classes.forEach(sensorClass => { sensorClass.init(); });
     

@@ -106,16 +106,17 @@ function getTemp(app) {
     try {
 
       const sensorId = req.params.sensorId;
-      const sensorValue = await app.locals.model.getTemp(sensorId);
+      const returnObj = await app.locals.model.getTemp(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
-      
-      res.send(`${sensorValue}`);
+
+      res.statusCode = OK;
+      res.json(returnObj);
     }
     catch (err) {
-      console.error(err);
-      console.log("ERROR in pc_server");
+      const reportStatus = getError(err);
+      res.status(reportStatus.status).json(reportStatus);
     }
   });
 }

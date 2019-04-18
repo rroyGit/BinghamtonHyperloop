@@ -15,16 +15,31 @@ class TelemetryData {
     initData (document, numSensors) {
         this.document = document;
         this.numSensors = numSensors;
+        this.sensorsSeqNum = new Array(this.numSensors).fill(-1);
     }
 
     setXMLOnLoad (request) {
         request.onload = () => {
             let sensorIndex = request.index;
             let sensorElement = this.getSensorElement(sensorIndex);
-            sensorElement.style.color = "#ff0026"
+            sensorElement.style.color = "#ff0026";
             
-            let value;
-            if ((value = getNumber(request.responseText)) != null) {
+            let value = getNumber(request.response.sensorValue);
+            let seqNum = getNumber(request.response.seqNum);
+
+            let storedSeqNum = this.sensorsSeqNum[sensorIndex];
+
+            if (storedSeqNum !== -1 && storedSeqNum === seqNum) {
+                let errorBlock = this.document.getElementById("errorDiv");
+                errorBlock.style.display = "block";
+                let sensorNames = this.document.getElementById("sensorNames");
+                sensorNames.innerHTML = `${sensorIndex}`;
+            }
+
+            this.sensorsSeqNum[sensorIndex] = seqNum;
+            
+            console.log(seqNum);
+            if (value != null) {
                 let sensorElement = this.getSensorElement(sensorIndex);
                 sensorElement.innerHTML = value;
             } else {
@@ -39,8 +54,9 @@ class TelemetryData {
             let finalLink = link.concat(`${sensorId}`);
 
             let request = new XMLHttpRequest();
-
+            
             request.open("GET", finalLink);
+            request.responseType = "json";
             request.index = i;
             this.setXMLOnLoad(request);
             request.send();            
@@ -77,6 +93,7 @@ class TelemetryData {
 module.exports = TelemetryData;
 
 let document;
+let sensorsSeqNum;
 let numSensors;
 let refreshTime;
 let sensorElements;
