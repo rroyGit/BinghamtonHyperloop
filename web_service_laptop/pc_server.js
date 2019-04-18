@@ -51,7 +51,7 @@ function setupRoutes(app) {
     app.get(`${TEMP}/:sensorId`, getTemp(app));
 
     // set temperature reading to database with a sensorId
-    // (e.g. /temp?sensorId=1&value=67)
+    // (e.g. /temp?sensorId=1&value=67&seqNum=0)
     app.get(`${TEMP}?`, setTemp(app));
     //-----------------------------------------------DIST----------------------
     // get last distance reading from database with a sensorId
@@ -84,18 +84,27 @@ function setupRoutes(app) {
 function getTemp (app) {
   return errorWrap(async function(req, res) {
     try {
-      const sensorId = req.params.sensorId; 
+      if (req.params == undefined || req.params.sensorId == undefined || req.params.sensorId.length === 0) {
+        throw {
+          isDomain: true,
+          errorCode: `BAD_REQUEST`,
+          message: `Incorrect url, try like > /temp/1`,
+        };
+      } 
+
+      const sensorId = req.params.sensorId;
       
       //const fileName = `temp${sensorId}.txt`;
       //const value = await app.locals.processor.readFile(fileName);
 
-      const value = await app.locals.pcDatabase.readLastTemp(sensorId);
+      const returnObj = await app.locals.pcDatabase.readLastTemp(sensorId);
 
-      res.send(value);
-     
+      res.statusCode = OK;
+      res.json(returnObj);
+    
     } catch(err) {
-      console.log(err);
-      res.send("BAD");
+      let statusReport = getError(err);
+      res.status(statusReport.status).json(statusReport);
     }
   });
 }
@@ -103,25 +112,29 @@ function getTemp (app) {
 function setTemp (app) {
   return errorWrap(async function(req, res) {
     try {
-      if (req.query.sensorId === null || req.query.sensorId.length === 0
-        || req.query.value === null || req.query.value.length === 0) {
+      
+      if (req.query.sensorId === undefined || req.query.sensorId.length === 0
+        || req.query.value === undefined || req.query.value.length === 0
+        || req.query.seqNum === undefined || req.query.seqNum.length === 0) {
         throw {
           isDomain: true,
           errorCode: `BAD_REQUEST`,
-          message: `Incorrect url, try like > temp?sensorId=1&value=26`,
+          message: `Incorrect url, try like > /temp?sensorId=1&value=26&seqNum=0`,
         };
       }
 
-      const [sensorId, value] = [req.query.sensorId, req.query.value];
+      const [sensorId, value, seqNum] = [req.query.sensorId, req.query.value, req.query.seqNum];
 
       //await app.locals.processor.writeFile(sensorId, value);
-      await app.locals.pcDatabase.writeTemp(sensorId,value);
+      await app.locals.pcDatabase.writeTemp(sensorId, value, seqNum);
 
-      res.send("GOOD");
+      res.statusCode = CREATED;
       
+      const returnObj = {URL: `/temp?sensorId=${sensorId}&value=${value}&seqNum=${seqNum}`};
+      res.json(returnObj);
     } catch(err) {
-      console.log(err);
-      res.send("BAD");
+      let statusReport = getError(err);
+      res.status(statusReport.status).json(statusReport);
     }
   });
 }
@@ -148,8 +161,8 @@ function getDist (app) {
 function setDist (app) {
   return errorWrap(async function(req, res) {
     try {
-      if (req.query.sensorId === null || req.query.sensorId.length === 0
-        || req.query.value === null || req.query.value.length === 0) {
+      if (req.query.sensorId === undefined || req.query.sensorId.length === 0
+        || req.query.value === undefined || req.query.value.length === 0) {
         throw {
           isDomain: true,
           errorCode: `BAD_REQUEST`,
@@ -192,8 +205,8 @@ function getSpeed (app) {
 function setSpeed (app) {
   return errorWrap(async function(req, res) {
     try {
-      if (req.query.sensorId === null || req.query.sensorId.length === 0
-        || req.query.value === null || req.query.value.length === 0) {
+      if (req.query.sensorId === undefined || req.query.sensorId.length === 0
+        || req.query.value === undefined || req.query.value.length === 0) {
         throw {
           isDomain: true,
           errorCode: `BAD_REQUEST`,

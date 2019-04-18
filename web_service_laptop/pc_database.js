@@ -45,8 +45,8 @@ class GNCDatabase {
     this.speedCollection = await this.createCollection("Speed");
 
     // init value to -1
-    await this.writeTemp('1','-1');
-    await this.writeTemp('2','-1');
+    await this.writeTemp('1','-1','0');
+    await this.writeTemp('2','-1','0');
     await this.writeDist('1','-1');
     await this.writeDist('2','-1');
     await this.writeSpeed('1','-1');
@@ -79,9 +79,9 @@ class GNCDatabase {
     return await this.databaseConnection.createCollection(collectionName);
   }
   //-----------------------------------------------TEMP----------------------
-  async writeTemp(sensorId, sensorValue) {
+  async writeTemp(sensorId, sensorValue, seqNum) {
     try {
-        await this.tempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+        await this.tempCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue, seqNum: seqNum} );
     } catch (err){
         console.log(err);
         throw `One or more errors in writing Database: ${this.databaseName} Collection: temperature`;
@@ -93,8 +93,8 @@ class GNCDatabase {
         const document = await this.tempCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
         if (document == null) throw `No document satisfies the query - readLastTemp() sensorID ${sensorId}`;
 
-        const sensorValue = document.sensorValue;
-        return sensorValue;
+        const [sensorValue, seqNum] = [document.sensorValue, document.seqNum];
+        return {sensorValue: sensorValue, seqNum: seqNum};
     } catch (err){
         console.log(err);
         throw `One or more errors in reading Database: ${this.databaseName} Collection: temperature`;
