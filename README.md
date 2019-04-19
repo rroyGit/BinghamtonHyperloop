@@ -11,7 +11,7 @@
   - Cors
   - Express
   - MongoDB
-  - *npm install cors express mongodb*
+  - *npm install cors express mongodb --save*
   ###### Web Server (node modules)
   - Axios
   - Express
@@ -19,7 +19,7 @@
   - Mustache
   - Chart.js
   - Browserify
-  - *npm install axios express multer mustache chart.js browserify*
+  - *npm install axios express multer mustache chart.js browserify --save*
 
 ##### Browserify (web server)
   - Create bundle by going into respective web page directory
@@ -65,7 +65,8 @@
     - *CD* to directory containing *package.json* and enter *npm install*
 
 ##### Steps (ordered) to run application properly
-  - Update PATH variable (if NOT running on localhost)
+  - Update PATH variable (only if NOT running on localhost and want to access app on another device)
+  - Install node modules (enter *npm install* on terminal under service and server dirs) 
   - Run MongoDB server
   - Run Web service
   - Run Web server
