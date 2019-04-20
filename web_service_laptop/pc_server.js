@@ -33,7 +33,7 @@ function init (port, processor, pcDatabase) {
 
     setupRoutes(app);
     
-    const server = app.listen(port, async function() {
+    const server = app.listen(port, "0.0.0.0", async function() {
       console.log(`PID ${process.pid} listening on port ${port}`);
     });
     return server;

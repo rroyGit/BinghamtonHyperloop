@@ -65,11 +65,15 @@
     - *CD* to directory containing *package.json* and enter *npm install*
 
 ##### Steps (ordered) to run application properly
-  - Update PATH variable (only if NOT running on localhost and want to access app on another device)
-  - Install node modules (enter *npm install* on terminal under service and server dirs) 
+  - Update PATH variable 
+    - only if NOT running on localhost and want to access app on another device
+  - Install node modules 
+    - enter *npm install* on terminal under service and server dirs
   - Run MongoDB server
   - Run Web service
   - Run Web server
+  - Ensure two node processes for above programs are allowed through Firewall 
+    - only if Arduino(s) wants to make web requests to web service & user wants access the web server (web page)
   - Open application
 
 ##### Open Application
@@ -78,8 +82,14 @@
     - http://<Device Physical IP>:3002/home/
     - http://<Device Physical IP>:3002/home/model
 
+##### Sending web requests to web service
+  - Send sensor data
+    - <Device Physical IP>:3001/temp?sensorId=1&value=45&seqNum=0
+  - Get data from stored sensor data
+    - <Device Physical IP>:3001/temp/1
+
 ##### Update PATH variable
-  - For dynamicData.js & chartData.js 
+  - For statusData.js & chartData.js in web server (required to make AJAX calls work)
     - Change PATH variable to the Device's Network IP that the server/service is running on (e.g. 192.168.1.23)
     - See above how to retrive the device's IP Addrress
 

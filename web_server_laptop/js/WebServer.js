@@ -37,7 +37,7 @@ function server(port, base, model, dir) {
 
   setupTemplates(app, TEMPLATES_DIR);
   setupRoutes(app);
-  app.listen(port, function() {
+  app.listen(port, "0.0.0.0", function() {
     console.log(`GNC Web Server listening on port ${port}`);
   });
 }
