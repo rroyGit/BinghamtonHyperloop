@@ -78,7 +78,7 @@ class TelemetryData {
 
             if (storedSeqNum !== -1 && storedSeqNum === seqNum) {
                 let errorBlock = this.document.getElementById("errorDiv");
-                errorBlock.style.display = "block";
+                //errorBlock.style.display = "block";
                 let sensorNames = this.document.getElementById("sensorNames");
                 sensorNames.innerHTML = `${sensorIndex}`;
             }
@@ -200,8 +200,8 @@ const PATH = "localhost";
 let classes;
 
 function init () {
-    classes = [new Temperature(document, 'tempSensor', 2)];
-                //new Distance(document, 'distSensor', 2), 
+    classes = [new Temperature(document, 'tempSensor', 2),
+                new Distance(document, 'distSensor', 2)];
                 //new Speed(document, 'speedSensor', 2)];
 
     classes.forEach(sensorClass => { sensorClass.init(); });

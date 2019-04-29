@@ -11,19 +11,19 @@ function Processor (fileName) {
     this.fileName = fileName;
 }
 
-Processor.prototype.writeFile = async function (sensorId, value) {
+Processor.prototype.writeFile = async function (sensorType, sensorId, value) {
     
     try {
         let data = `sensorId: ${sensorId} value: ${value}`
 
-        await appendFile('temp.txt', `${data}\n`, (err, data) => {
+        await appendFile(`${sensorType}.txt`, `${data}\n`, (err, data) => {
             if (err) throw err;
-            console.log('Temp updated!');
+            // console.log('Temp updated!');
         });
 
-        await writeFile(`temp${sensorId}.txt`, `value: ${value}`, (err,  data) => {
+        await appendFile(`${sensorType}_${sensorId}.txt`, `${value}\n`, (err,  data) => {
             if (err) throw err;
-            console.log('Individual temp updated!');
+            // console.log('Individual temp updated!');
         });
 
     } catch (err) {

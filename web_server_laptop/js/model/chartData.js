@@ -95,7 +95,7 @@ const stopAction = (context) => {
 }
 
 const createClass = () => {
-    let [numSensors, numPreviousTimes] = [4, 10];
+    let [numSensors, numPreviousTimes] = [2, 15];
 
     if (sensorClass) sensorClass.destroyChart();
 
@@ -112,7 +112,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Distance":
-            sensorClass = new Distance(ctx, 4, 20);
+            sensorClass = new Distance(ctx, numSensors, 20);
             tempButton.style.border = null;
             distButton.style.borderColor = "#ffffff";
             speedButton.style.border = null;
@@ -122,7 +122,7 @@ const createClass = () => {
             speedButton.disabled = false;
             break;
         case "Speed":
-            sensorClass = new Speed(ctx, 3, 30);
+            sensorClass = new Speed(ctx, numSensors, 30);
             tempButton.style.border = null;
             distButton.style.border = null;
             speedButton.style.borderColor = "#ffffff";

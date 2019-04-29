@@ -31,7 +31,7 @@ class TelemetryData {
 
             if (storedSeqNum !== -1 && storedSeqNum === seqNum) {
                 let errorBlock = this.document.getElementById("errorDiv");
-                errorBlock.style.display = "block";
+                //errorBlock.style.display = "block";
                 let sensorNames = this.document.getElementById("sensorNames");
                 sensorNames.innerHTML = `${sensorIndex}`;
             }
