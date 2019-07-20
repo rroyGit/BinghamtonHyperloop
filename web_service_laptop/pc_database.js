@@ -47,10 +47,10 @@ class GNCDatabase {
     // init value to -1
     await this.writeTemp('1','-1','0');
     await this.writeTemp('2','-1','0');
-    await this.writeDist('1','-1');
-    await this.writeDist('2','-1');
-    await this.writeSpeed('1','-1');
-    await this.writeSpeed('2','-1');
+    await this.writeDist('1','-1','0');
+    await this.writeDist('2','-1','0');
+    await this.writeSpeed('1','-1','0');
+    await this.writeSpeed('2','-1','0');
   }
 
   /** Release all resources held by this doc-finder.  Specifically,
@@ -101,9 +101,9 @@ class GNCDatabase {
     }
   }
   //-----------------------------------------------DIST----------------------
-  async writeDist(sensorId, sensorValue) {
+  async writeDist(sensorId, sensorValue, seqNum) {
     try {
-        await this.distCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+        await this.distCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue, seqNum: seqNum} );
     } catch (err){
         console.log(err);
         throw `One or more errors in writing Database: ${this.databaseName} Collection: distance`;
@@ -115,17 +115,17 @@ class GNCDatabase {
         const document = await this.distCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
         if (document == null) throw `No document satisfies the query - readLastDist() sensorID ${sensorId}`;
 
-        const sensorValue = document.sensorValue;
-        return sensorValue;
+        const [sensorValue, seqNum] = [document.sensorValue, document.seqNum];
+        return {sensorValue: sensorValue, seqNum: seqNum};
     } catch (err){
         console.log(err);
         throw `One or more errors in reading Database: ${this.databaseName} Collection: distance`;
     }
   }
   //-----------------------------------------------SPEED---------------------
-  async writeSpeed(sensorId, sensorValue) {
+  async writeSpeed(sensorId, sensorValue, seqNum) {
     try {
-        await this.speedCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue} );
+        await this.speedCollection.insertOne( {sensorID: sensorId, sensorValue: sensorValue, seqNum: seqNum} );
     } catch (err){
         console.log(err);
         throw `One or more errors in writing Database: ${this.databaseName} Collection: speed`;
@@ -137,8 +137,8 @@ class GNCDatabase {
         const document = await this.speedCollection.findOne({"sensorID": `${sensorId}`}, { sort: { _id: -1 }, limit: 1 });
         if (document == null) throw `No document satisfies the query - readLastSpeed() sensorID ${sensorId}`;
 
-        const sensorValue = document.sensorValue;
-        return sensorValue;
+        const [sensorValue, seqNum] = [document.sensorValue, document.seqNum];
+        return {sensorValue: sensorValue, seqNum: seqNum};
     } catch (err){
         console.log(err);
         throw `One or more errors in reading Database: ${this.databaseName} Collection: speed`;

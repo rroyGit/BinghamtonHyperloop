@@ -37,7 +37,7 @@ function server(port, base, model, dir) {
 
   setupTemplates(app, TEMPLATES_DIR);
   setupRoutes(app);
-  app.listen(port, function() {
+  app.listen(port, "0.0.0.0", function() {
     console.log(`GNC Web Server listening on port ${port}`);
   });
 }
@@ -126,16 +126,17 @@ function getDist(app) {
     try {
 
       const sensorId = req.params.sensorId;
-      const sensorValue = await app.locals.model.getDist(sensorId);
+      const returnObj = await app.locals.model.getDist(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
       
-      res.send(`${sensorValue}`);
+      res.statusCode = OK;
+      res.json(returnObj);
     }
     catch (err) {
-      console.error(err);
-      console.log("ERROR in pc_server");
+      const reportStatus = getError(err);
+      res.status(reportStatus.status).json(reportStatus);
     }
   });
 }
@@ -145,16 +146,17 @@ function getSpeed(app) {
     try {
 
       const sensorId = req.params.sensorId;
-      const sensorValue = await app.locals.model.getSpeed(sensorId);
+      const returnObj = await app.locals.model.getSpeed(sensorId);
       
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
       
-      res.send(`${sensorValue}`);
+      res.statusCode = OK;
+      res.json(returnObj);
     }
     catch (err) {
-      console.error(err);
-      console.log("ERROR in pc_server");
+      const reportStatus = getError(err);
+      res.status(reportStatus.status).json(reportStatus);
     }
   });
 }
