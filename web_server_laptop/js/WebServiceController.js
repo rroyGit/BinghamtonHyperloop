@@ -6,6 +6,7 @@ function WebServiceController(baseUrl) {
   this.wsTempUrl = `${baseUrl}/temp`;
   this.wsDistUrl = `${baseUrl}/dist`;
   this.wsSpeedUrl = `${baseUrl}/speed`;
+  this.wsIPAddr = `${baseUrl}/ipAddr`;
 }
 
 module.exports = WebServiceController;
@@ -14,7 +15,7 @@ module.exports = WebServiceController;
 
 WebServiceController.prototype.getTemp = async function (sensorId) {
   try {
-    const url = this.wsTempUrl + "/" + `${sensorId}`;
+    const url = this.wsTempUrl + '/' + `${sensorId}`;
     const response = await axios.get(url);
 
     return response.data;
@@ -28,7 +29,7 @@ WebServiceController.prototype.getTemp = async function (sensorId) {
 
 WebServiceController.prototype.getDist = async function (sensorId) {
   try {
-    const url = this.wsDistUrl + "/" + `${sensorId}`;
+    const url = this.wsDistUrl + '/' + `${sensorId}`;
     const response = await axios.get(url);
 
     return response.data;
@@ -42,7 +43,7 @@ WebServiceController.prototype.getDist = async function (sensorId) {
 
 WebServiceController.prototype.getSpeed = async function (sensorId) {
   try {
-    const url = this.wsSpeedUrl + "/" + `${sensorId}`;
+    const url = this.wsSpeedUrl + '/' + `${sensorId}`;
     const response = await axios.get(url);
 
     return response.data;
@@ -53,4 +54,3 @@ WebServiceController.prototype.getSpeed = async function (sensorId) {
     throw (err.response && err.response.data) ? err.response.data : err;
   }
 };
-

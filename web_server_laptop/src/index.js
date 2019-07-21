@@ -30,7 +30,7 @@ async function go(args) {
     console.error(err);
   }
 }
-    
+
 if (process.argv.length != 4) {
     usage();
 } else {

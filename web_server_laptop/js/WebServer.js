@@ -1,5 +1,6 @@
 'use strict';
 
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const upload = require('multer')();
 const fs = require('fs');
@@ -19,6 +20,7 @@ const NOT_FOUND = 404;
 const CONFLICT = 409;
 const SERVER_ERROR = 500;
 
+
 function server(port, base, model, dir) {
   const app = express();
   app.locals.port = port;
@@ -26,12 +28,23 @@ function server(port, base, model, dir) {
   app.locals.model = model;
   app.locals.dir = dir;
 
+  app.use(cookieParser());
+
+  app.use(function (req, res, next) {
+    const cookie = req.cookies.hostName;
+
+    if (cookie === undefined) {
+      const addr = getIPAddr();
+      res.cookie('hostName', `${addr}`, { maxAge: 900000, httpOnly: false });
+    }
+    next();
+  });
+
   // base = '/home'
   app.use(base, express.static(dir));
-  
-  
+
   app.use(bodyParser.urlencoded({
-    extended: true
+      extended: true
   }));
   app.use(bodyParser.json());
 
@@ -49,16 +62,16 @@ const INDEX_PAGE = '/';
 const MODEL_PAGE = '/home/model';
 
 function setupRoutes(app) {
-  
+
   const BASE = app.locals.base;
 
   app.get(INDEX_PAGE, redirectHome(app));
-  
+
   // BASE = 'home/'
   app.get(BASE, toHomePage(app));
   app.get(MODEL_PAGE, toModelPage(app));
 
-  
+
   // web service routes
   app.get(`/temp/:sensorId`, getTemp(app));
   app.get(`/dist/:sensorId`, getDist(app));
@@ -107,7 +120,7 @@ function getTemp(app) {
 
       const sensorId = req.params.sensorId;
       const returnObj = await app.locals.model.getTemp(sensorId);
-      
+
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
 
@@ -127,10 +140,10 @@ function getDist(app) {
 
       const sensorId = req.params.sensorId;
       const returnObj = await app.locals.model.getDist(sensorId);
-      
+
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
-      
+
       res.statusCode = OK;
       res.json(returnObj);
     }
@@ -147,10 +160,10 @@ function getSpeed(app) {
 
       const sensorId = req.params.sensorId;
       const returnObj = await app.locals.model.getSpeed(sensorId);
-      
+
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
-      
+
       res.statusCode = OK;
       res.json(returnObj);
     }
@@ -161,6 +174,13 @@ function getSpeed(app) {
   });
 }
 
+function getIPAddr() {
+  try {
+    return fs.readFileSync('IP_Addr.txt');
+  } catch (err) {
+    console.log(err);
+  }
+}
 //action routines for routes + any auxiliary functions.
 
 /************************ General Utilities ****************************/
@@ -169,7 +189,7 @@ function getSpeed(app) {
 function generateCustomHTML(lines, terms) {
   let termArray = terms.split(" ");
   let retArray = [];
-   
+
   for (let line of lines) {
     for (let term of termArray) {
       line = line.toLowerCase().replace(term.toLowerCase(), getHTMLString(term.toLowerCase()));
@@ -231,7 +251,7 @@ function doMustache(app, templateId, view) {
   return mustache.render(app.templates[templateId], view, templates);
 }
 
-/** Add contents all dir/*.ms files to app templates with each 
+/** Add contents all dir/*.ms files to app templates with each
  *  template being keyed by the basename (sans extensions) of
  *  its file basename.
  */
@@ -253,7 +273,7 @@ function setupTemplates(app, dir) {
 
 // error handlers
 
-/** Set up error handling for handler by wrapping it in a 
+/** Set up error handling for handler by wrapping it in a
  *  try-catch with chaining to error handler on error.
  */
 function errorWrap(handler) {
@@ -273,13 +293,13 @@ function getError (err) {
   if (err.isDomain) {
     let statusType;
     switch (err.errorCode) {
-      case "NOT_FOUND" : 
+      case "NOT_FOUND" :
         statusType = NOT_FOUND;
         break;
-      case "EXISTS" : 
+      case "EXISTS" :
         statusType = CONFLICT;
-        break;  
-      default: 
+        break;
+      default:
         statusType = BAD_REQUEST;
     }
 
@@ -300,10 +320,10 @@ function getError (err) {
 }
 /** Return error handler which ensures a server error results in nice
  *  JSON sent back to client with details logged on console.
- */ 
+ */
 function doErrors(app) {
   return async function(err, req, res, next) {
- 
+
     // catch JSON syntax error
     if (err instanceof SyntaxError) {
       const error = {error: "Invalid JSON", tips: "Check if body has correct JSON syntax" }

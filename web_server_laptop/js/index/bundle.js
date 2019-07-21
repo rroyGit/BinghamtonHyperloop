@@ -185,27 +185,30 @@ const Temperature = require('./Temperature');
 const Distance = require('./Distance');
 const Speed = require('./Speed');
 
-var startButton = document.getElementById("startButton");
-var stopButton = document.getElementById("stopButton");
-var timeInput = document.getElementById("timeInput");
+var startButton = document.getElementById('startButton');
+var stopButton = document.getElementById('stopButton');
+var timeInput = document.getElementById('timeInput');
+var modelPageButton = document.getElementById('modelLink');
 
+let PATH;
 
-
-var state = "STOP";
+var state = 'STOP';
 var myInterval;
 var connectionGood = true;
-
-const PATH = "localhost";
 
 let classes;
 
 function init () {
+    PATH = getCookie('hostName');
+  
+    modelPageButton.href = `http://${PATH}:3002/home/model`;
+
     classes = [new Temperature(document, 'tempSensor', 2),
                 new Distance(document, 'distSensor', 2)];
                 //new Speed(document, 'speedSensor', 2)];
 
     classes.forEach(sensorClass => { sensorClass.init(); });
-    
+
     startButton.addEventListener("mouseup", () => {startAction(startButton);});
     stopButton.addEventListener("mouseup", () => {stopAction(stopButton);});
 }
@@ -216,9 +219,9 @@ const startAction = (context) => {
             alert("Requests could not be sent, other server offline. Restart server!");
             return;
         }
-        
+
         let valueRefresh = timeInput.value;
-       
+
         if (valueRefresh === "" || valueRefresh  < 10) {
             alert("Invalid refresh time. Cannot start!");
             return;
@@ -227,7 +230,7 @@ const startAction = (context) => {
         stopButton.style.border = null;
         timeInput.style.background = "#808080";
         timeInput.disabled = true;
-        
+
         state = "START"
         context.classList.remove('mouse-down');
         context.style.borderColor = "#ffffff";
@@ -258,6 +261,22 @@ const stopAction = (context) => {
 
 function sendRequests () {
     classes.forEach(sensorClass => { sensorClass.apply(PATH); });
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 
 init();

@@ -12,8 +12,7 @@ var tempButton = document.getElementById("temp");
 var distButton = document.getElementById("dist");
 var speedButton = document.getElementById("speed");
 
-const PATH = "localhost";
-
+let PATH;
 
 var requestState = "STOP";
 var myInterval;
@@ -23,7 +22,8 @@ var sensorState = "Temperature";
 var sensorClass = null;
 
 function init () {
-    
+    PATH = getCookie('hostName');
+
     startButton.addEventListener("mouseup", () => {startAction(sensorClass, startButton);} );
     stopButton.addEventListener("mouseup", () => {stopAction(stopButton);} );
 
@@ -53,11 +53,11 @@ const startAction = (currentClass, context) => {
             alert("Requests could not be sent, other server offline. Restart server!");
             return;
         }
-        
+
         let valueRefresh = timeInput.value;
 
         currentClass.setChartAxis(valueRefresh);
-       
+
         if (valueRefresh === "" || valueRefresh  < 10) {
             alert("Invalid refresh time. Cannot start!");
             return;
@@ -66,7 +66,7 @@ const startAction = (currentClass, context) => {
         stopButton.style.border = null;
         timeInput.style.background = "#808080";
         timeInput.disabled = true;
-        
+
         context.classList.remove('mouse-down');
         context.style.borderColor = "#ffffff";
 
@@ -101,7 +101,7 @@ const createClass = () => {
 
     switch (sensorState) {
         case "Temperature":
-            
+
             sensorClass = new Temperature(ctx, numSensors, numPreviousTimes);
             tempButton.style.borderColor = "#ffffff";
             distButton.style.border = null;
@@ -138,6 +138,21 @@ const createClass = () => {
     sensorClass.setChartAxis(timeInput.value);
 }
 
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 stopButton.style.borderColor = "#ffffff";
 tempButton.style.borderColor = "#ffffff";

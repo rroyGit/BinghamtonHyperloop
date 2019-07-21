@@ -7,18 +7,18 @@
     <link type="text/css" rel="stylesheet" href="statics/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    
+
   </head>
-  
+
   <body>
-    <header> 
+    <header>
       <div class="logoheader">
         <img class="logo" src="statics/image/logo.png" alt="" width="300" height="100">
         <h1> GNC Hub </h1>
       </div>
-      
+
     </header>
-    
+
     <div id="errorDiv">
       <h2 id="errorTitle">Error</h2>
       <h3>Sensor(s) connection lost or delayed</h3>
@@ -27,11 +27,11 @@
 
     <div class="buttonsWrapper">
       <div class="refreshTimeC">
-          <span id="refreshTitle">Refresh Time (ms) 
+          <span id="refreshTitle">Refresh Time (ms)
             <input id="timeInput" type="number" value="2000">
-          </span> 
+          </span>
       </div>
-      
+
       <div>
         <button class="buttons" id="startButton">Start</button>
         <div class="divider"></div>
@@ -39,7 +39,7 @@
       </div>
 
       <div class="options">
-          <a href='http://localhost:3002/home/model' class="optionsButton" id="model">Model Page</a> 
+          <a id="modelLink" class="optionsButton" >Model Page</a>
       </div>
 
     </div>
@@ -83,7 +83,7 @@
         <div class="sensor" id="distSensor4">0</div> <span class="unit">ft</span>
       </div>
     </div>
-    
+
     <h2 class="headerSensor" id="speedHeader">Speed</h2>
     <div class="sensors">
       <div>
