@@ -29,16 +29,17 @@ class TelemetryData {
 
             let storedSeqNum = this.sensorsSeqNum[sensorIndex];
 
+            //console.log(storedSeqNum + " " + seqNum + " " + sensorIndex);
+
             if (storedSeqNum !== -1 && storedSeqNum === seqNum) {
                 let errorBlock = this.document.getElementById("errorDiv");
-                //errorBlock.style.display = "block";
+                // errorBlock.style.display = "block";
                 let sensorNames = this.document.getElementById("sensorNames");
-                sensorNames.innerHTML = `${sensorIndex}`;
+                sensorNames.innerHTML = `${sensorIndex + 1}`;
             }
 
             this.sensorsSeqNum[sensorIndex] = seqNum;
             
-            console.log(seqNum);
             if (value != null) {
                 let sensorElement = this.getSensorElement(sensorIndex);
                 sensorElement.innerHTML = value;
