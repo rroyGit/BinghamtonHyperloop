@@ -414,7 +414,7 @@ const stopAction = (context) => {
 }
 
 const createClass = () => {
-    let [numSensors, numPreviousTimes] = [4, 15];
+    let [numSensors, numPreviousTimes] = [2, 15];
 
     if (sensorClass) sensorClass.destroyChart();
 
@@ -457,20 +457,9 @@ const createClass = () => {
     sensorClass.setChartAxis(timeInput.value);
 }
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+function getCookie(name) {
+	    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	    return v ? v[2] : null;
 }
 
 stopButton.style.borderColor = "#ffffff";

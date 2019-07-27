@@ -21,16 +21,13 @@ const SERVER_ERROR = 500;
 
 function serve(port, base, webServiceController) {
   const app = express();
+  
   app.locals.port = port;
   app.locals.base = base;
   app.locals.webServiceController = webServiceController;
 
-
   process.chdir(__dirname);
-  // base = '/home'
   app.use(base, express.static(__dirname));
-  
-  
   app.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -38,6 +35,7 @@ function serve(port, base, webServiceController) {
 
   setupTemplates(app, TEMPLATES_DIR);
   setupRoutes(app);
+
   app.listen(port, function() {
     console.log(`GNC Web Server listening on port ${port}`);
   });
@@ -50,16 +48,16 @@ const INDEX_PAGE = '/';
 const MODEL_PAGE = '/home/model';
 
 function setupRoutes(app) {
-  
+
   const BASE = app.locals.base;
 
   app.get(INDEX_PAGE, redirectHome(app));
-  
+
   // BASE = 'home/'
   app.get(BASE, toHomePage(app));
   app.get(MODEL_PAGE, toModelPage(app));
 
-  
+
   // web service routes
   app.get(`/temp/:sensorId`, getTemp(app));
 
@@ -101,16 +99,16 @@ function toModelPage(app) {
 }
 
 function getTemp(app) {
-  
+
   return errorWrap(async function(req, res) {
     try {
 
       const sensorId = req.params.sensorId;
       const sensorValue = await app.locals.webServiceController.getTemp(sensorId);
-      
+
       //const model = { base: app.locals.base, name: name, content: contentData };
       //const html = doMustache(app, 'docUploaded', model);
-      
+
       res.send(`${sensorValue}`);
     }
     catch (err) {
@@ -128,7 +126,7 @@ function getTemp(app) {
 function generateCustomHTML(lines, terms) {
   let termArray = terms.split(" ");
   let retArray = [];
-   
+
   for (let line of lines) {
     for (let term of termArray) {
       line = line.toLowerCase().replace(term.toLowerCase(), getHTMLString(term.toLowerCase()));
@@ -190,7 +188,7 @@ function doMustache(app, templateId, view) {
   return mustache.render(app.templates[templateId], view, templates);
 }
 
-/** Add contents all dir/*.ms files to app templates with each 
+/** Add contents all dir/*.ms files to app templates with each
  *  template being keyed by the basename (sans extensions) of
  *  its file basename.
  */
@@ -212,7 +210,7 @@ function setupTemplates(app, dir) {
 
 // error handlers
 
-/** Set up error handling for handler by wrapping it in a 
+/** Set up error handling for handler by wrapping it in a
  *  try-catch with chaining to error handler on error.
  */
 function errorWrap(handler) {
@@ -232,13 +230,13 @@ function getError (err) {
   if (err.isDomain) {
     let statusType;
     switch (err.errorCode) {
-      case "NOT_FOUND" : 
+      case "NOT_FOUND" :
         statusType = NOT_FOUND;
         break;
-      case "EXISTS" : 
+      case "EXISTS" :
         statusType = CONFLICT;
-        break;  
-      default: 
+        break;
+      default:
         statusType = BAD_REQUEST;
     }
 
@@ -259,10 +257,10 @@ function getError (err) {
 }
 /** Return error handler which ensures a server error results in nice
  *  JSON sent back to client with details logged on console.
- */ 
+ */
 function doErrors(app) {
   return async function(err, req, res, next) {
- 
+
     // catch JSON syntax error
     if (err instanceof SyntaxError) {
       const error = {error: "Invalid JSON", tips: "Check if body has correct JSON syntax" }
