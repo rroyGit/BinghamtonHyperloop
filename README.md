@@ -87,9 +87,9 @@
 
 ##### Open Application
   - Open browser (ideally Google Chrome) and enter either:
-    - http://<Device Physical IP>:3002/
-    - http://<Device Physical IP>:3002/home/
-    - http://<Device Physical IP>:3002/home/model
+    - http://\<Device Physical IP>:3002/
+    - http://\<Device Physical IP>:3002/home/
+    - http://\<Device Physical IP>:3002/home/model
 
 ##### REST API
   - Send data (GET):  
